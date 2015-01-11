@@ -1,0 +1,24 @@
+{
+  "name": "database",
+  "version": "1.0.0",
+  "description": "Project of Basi di Dati 2015",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.10.7",
+    "mysql": "^2.5.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsparber/database.git"
+  },
+  "author": "Julian Sparber",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/jsparber/database/issues"
+  },
+  "homepage": "https://github.com/jsparber/database"
+}
