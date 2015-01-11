@@ -5,7 +5,9 @@
   "main": "index.js",
   "dependencies": {
     "express": "^4.10.7",
-    "mysql": "^2.5.4"
+    "express-react-views": "^0.7.0",
+    "mysql": "^2.5.4",
+    "react": "^0.12.2"
   },
   "devDependencies": {},
   "scripts": {
