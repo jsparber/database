@@ -20,24 +20,24 @@ docker run --name some-mariadb -e MYSQL_ROOT_PASSWORD=mysecretpassword -d mariad
 | Morning |      1, 14       |
 
 ######Pricing
-########Auction
+######Auction
 | Product ID | Price |
 | ---------- | ----- |
 |      11    |  10,5 |
 
-########bids
+######bids
 |     Data        | Product ID | Amount |  User  |
 | --------------- | ------ | ---------- | ------ |
 | 27/01/2014 13:20|    11  |    12      | Julian |
 
-######## instantSell
+######instantSell
 | Product ID | Price |
 | ---------- | ----- |
 |      1     |  10,5 |
 
-########Shipping
-| Product ID | Carrier | Country | Shipping Cost |  | Transit Time |
-| ---------- | ------- | -------- | ------------- | ------------ |
+######Shipping
+| Product ID | Carrier | Country | Shipping Cost | Transit Time |
+| ---------- | ------- | ------- | ------------- | ------------ |
 |      1     |   TNT   |  Italy  |      3.50     |  10-20 Days  |
 
 ######Buyer
