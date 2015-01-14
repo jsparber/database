@@ -28,6 +28,7 @@ docker run --name some-mariadb -e MYSQL_ROOT_PASSWORD=mysecretpassword -d mariad
 
 ######Vendor
 Maybe its better to set seller in the product table
+
 |  User  | List of Product|
 | ------ | -------------- | 
 | Julian |      1, 12     |
@@ -39,4 +40,5 @@ Maybe its better to set seller in the product table
 
 ######User Rating
 | User | No. of Votes | Rating |
+|------|-------|----|
 | Julian | 1000 | 100% |
