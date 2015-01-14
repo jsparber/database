@@ -8,9 +8,9 @@ docker run --name some-mariadb -e MYSQL_ROOT_PASSWORD=mysecretpassword -d mariad
 
 ###Data Sturct
 ######Products
-|   ID  |  Product Name |   Description         |         Tag           | 
-| ----- | --------------| ----------------------| --------------------- |
-| 1     | Mokka         | Coffee making machine | Coffee, Mokka, Moring |
+|   ID  |  Product Name |   Description         |         Tag            |       Price       | Shipping |
+| ----- | --------------| ----------------------| ---------------------- | ----------------- | -------- |
+| 1     | Mokka         | Coffee making machine | Coffee, Mokka, Morning |       3.50        | 1.50     |
 
 ######Users
 
