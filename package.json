@@ -19,7 +19,7 @@
 		"devDependencies": {},
 		"scripts": {
 			"test": "echo \"Error: no test specified\" && exit 1",
-			"start": "browserify -t reactify --standalone main views/main.js -o public/scripts/main.js; ./bin/www"
+			"start": "./bin/www"
 		},
 		"repository": {
 			"type": "git",

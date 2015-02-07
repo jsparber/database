@@ -16,29 +16,38 @@ connection.connect(function(err) {
 
 connection.query('USE books', function(err, data) {
 	if (err) throw err;
-	//console.log(data);
+//console.log(data);
 });
 
+//connection.query('CREATE TABLE products (id INT, name VARCHAR(20), description VARCHAR(400))');
 
-//connection.query('CREATE TABLE authors (id INT, name VARCHAR(20), email VARCHAR(20))');//, function(err, data, data1, data2) {
-
-connection.query('SHOW TABLES', function(err, row, data1) {
+/*connection.query('SHOW TABLES', function(err, row, data1) {
 	if (err) throw err;
 	console.log("First:", row);
-	//console.log("Second:", data1);
+//console.log("Second:", data1);
 });
+*/
 
-connection.query('INSERT INTO authors (id,name,email) VALUES(1,"Vivek","xuz@abc.com")', function(err, data1) {
+connection.query('INSERT INTO products (id,name,description) VALUES(1,"Toy","A toy for a child")', function(err, data1) {
 	if (err) throw err;
-	//console.log("Second:", data1);
-	//console.log("First:", row);
 });
 
-module.exports.query = function(callback) { 
-	connection.query('SELECT * FROM authors', function(err, row, data1) {
-		if (err) throw err;
-		callback(row);
-	});
+module.exports.query = function(request, callback, arg) { 
+	switch (request) {
+		case "products":
+			connection.query('SELECT * FROM products', function(err, row) {
+				if (err) throw err;
+				callback(row);
+			});
+			break;
+		case "search":
+			connection.query('SELECT * FROM products WHERE name LIKE \'%' + arg+ '%\'', function(err, row) {
+				if (err) throw err;
+				callback(row);
+				console.log("Result", row);
+			});
+			break;
+	}
 };
 
 
