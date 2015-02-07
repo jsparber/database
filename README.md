@@ -3,9 +3,12 @@ database
 Project of Basi di Dati 2015
 
 
-##Create docker
-docker run --name some-mariadb -e MYSQL_ROOT_PASSWORD=mysecretpassword -d mariadb
-
+##Create database in a docker
+    docker run --name mariadb -e MYSQL_ROOT_PASSWORD=mysecretpassword -d mariadb
+  
+  To get the server ip address
+  
+    docker inspect mariadb | grep IPAddress
 ##Data Sturct
 ####Products
 | Product ID | Product Name |    Description    |  Add date  | 
