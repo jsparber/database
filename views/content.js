@@ -40,9 +40,6 @@ var Menu = React.createClass({
 });
 
 var LogoutButton = React.createClass({
-	clickHandler: function() {
-		alert("Doing Logout");
-	},
 	render: function() {
 		return (
 				<form action="/logout">

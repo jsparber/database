@@ -64,7 +64,6 @@ router.get('/restricted', restrict, function(request, response){
 
 router.get('/logout', function(request, response){
 	request.session.destroy(function(){
-		console.log("###########################################", request.session);
 		response.redirect('/');
 	});
 });

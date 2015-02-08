@@ -18269,9 +18269,6 @@ var Menu = React.createClass({displayName: "Menu",
 });
 
 var LogoutButton = React.createClass({displayName: "LogoutButton",
-	clickHandler: function() {
-		alert("Doing Logout");
-	},
 	render: function() {
 		return (
 				React.createElement("form", {action: "/logout"}, 
