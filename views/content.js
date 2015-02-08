@@ -15,7 +15,7 @@ module.exports = React.createClass({
 		}
 		switch (req){
 		case "form": 
-			body = <Form data={data}/>;
+			body = <Form forms = {data.forms}/>;
 			break;
 		case "products": 
 			body = <Products products = {data.products}/>
@@ -90,7 +90,7 @@ var Products = React.createClass({
 
 var Form = React.createClass({
 	render: function() {
-			var forms = this.props.data.map(function(form, index){
+			var forms = this.props.forms.map(function(form, index){
 				var fieldes = form.map(function(field, index){
 					if (index > 0)
 						return (

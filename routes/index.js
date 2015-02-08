@@ -14,9 +14,9 @@ router.get('/', function(req, res) {
 });
 
 router.get('/form', function(req, res) {
-	var data = [
+	var data = {forms: [
 	["Product ID", "Product Name", "Description", "Tag"]
-	];
+	]};
 	data.req = "form";
 		res.render('index', {data: data});
 });
