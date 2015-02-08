@@ -3,6 +3,24 @@ var Content = require('./Content');
 module.exports = React.createClass({
 	render: function() {
 		var data = this.props.data;
+		var req = this.props.req;
+		var loggedIn = this.props.loggedIn;
+		var body;
+		var loginButton;
+		console.log("######", req);
+		if (loggedIn) {
+			loginButton = <LogoutButton />;
+		} else {
+			loginButton = <LoginButton />;
+		}
+		switch (req){
+		case "form": 
+			body = <Form data={data}/>;
+			break;
+		case "products": 
+			body = <Products products = {data.products}/>
+			break;
+		}
 		return (
 				<html lang="en">
 				<head>
@@ -13,7 +31,8 @@ module.exports = React.createClass({
 				<body>
 				<Menu />
 				<Search />
-				<Products products = {data.products}/>
+				{loginButton}
+				{body}
 				</body>
 				</html>
 				);
@@ -29,6 +48,25 @@ var Menu = React.createClass({
 	}
 });
 
+var LogoutButton = React.createClass({
+	clickHandler: function() {
+		alert("Doing Login");
+	},
+	render: function() {
+		return (
+				<button onClick={this.clickHandler}>Logout</button>
+				)
+	}
+});
+
+var LoginButton = React.createClass({
+	render: function() {
+		return (
+				<button>Login</button>
+				)
+	}
+});
+		
 var Search = React.createClass({
 	render: function() {
 		return (
@@ -51,6 +89,34 @@ var Products = React.createClass({
 		return (
 				<div>
 				{productList}
+				</div>
+				)
+	}
+});
+
+var Form = React.createClass({
+	render: function() {
+		console.log(this.props.products)
+			var forms = this.props.data.map(function(form, index){
+				var fieldes = form.map(function(field, index){
+					if (index > 0)
+						return (
+								<div>{field}: 
+								<input name={field} />
+								</div>
+								)
+				});
+				return (
+						<div>
+						{fieldes}
+						</div>
+						)
+			});
+		return (
+				<div>
+				<form>
+				{forms}
+				</form>
 				</div>
 				)
 	}
