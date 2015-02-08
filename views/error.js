@@ -1,5 +1,5 @@
 var React = require('react');
-var Content = require('./Content');
+var Content = require('./content');
 module.exports = React.createClass({
 	render: function() {
 		console.log(this.props);
