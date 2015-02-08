@@ -13,7 +13,8 @@ module.exports = React.createClass({
 				<body>
 				<Menu />
 				<Search />
-				<Products products = {data.products}/>
+				<div />
+				<Form data={data}/>
 				</body>
 				</html>
 				);
@@ -40,17 +41,29 @@ var Search = React.createClass({
 	}
 });
 
-var Products = React.createClass({
+var Form = React.createClass({
 	render: function() {
 		console.log(this.props.products)
-			var productList = this.props.products.map(function(product){
+			var forms = this.props.data.map(function(form, index){
+				var fieldes = form.map(function(field, index){
+					if (index > 0)
+						return (
+								<div>{field}: 
+								<input name={field} />
+								</div>
+								)
+				});
 				return (
-						<div>{JSON.stringify(product)}</div>
+						<div>
+						{fieldes}
+						</div>
 						)
 			});
 		return (
 				<div>
-				{productList}
+				<form>
+				{forms}
+				</form>
 				</div>
 				)
 	}
