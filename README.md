@@ -9,6 +9,16 @@ Project of Basi di Dati 2015
   To get the server ip address
   
     docker inspect mariadb | grep IPAddress
+##Run Server
+		watchify -t reactify --standalone main views/main.js -o public/scripts/main.js -v
+
+		and than
+
+		./bin/www
+
+		or
+
+		browserify -t reactify --standalone main views/main.js -o public/scripts/main.js; ./bin/www
 ##Data Sturct
 ####Products
 | Product ID | Product Name |    Description    |  Add date  | 
