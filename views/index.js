@@ -44,7 +44,6 @@ module.exports = React.createClass({
 		 * know what you are doing and good luck.
 		 */
 		var initScript = 'main(' + JSON.stringify(data).replace(/<script>/g, '<scr"+"ipt>').replace(/<\/script>/g, '</scr"+"ipt>') + ')';
-				console.log(initScript);
 				return (
 					<html lang="en">
 					<head>

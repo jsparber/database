@@ -7,7 +7,6 @@ module.exports = React.createClass({
 		var loggedIn = data.loggedIn;
 		var body;
 		var loginButton;
-		console.log("Request: ", data);
 		if (loggedIn) {
 			loginButton = <LogoutButton />;
 		} else {
@@ -42,11 +41,13 @@ var Menu = React.createClass({
 
 var LogoutButton = React.createClass({
 	clickHandler: function() {
-		alert("Doing Login");
+		alert("Doing Logout");
 	},
 	render: function() {
 		return (
-				<button className="button" onClick={this.clickHandler}>Logout</button>
+				<form action="/logout">
+				<input type="submit" className="button" value="Logout" />
+				</form>
 				)
 	}
 });
@@ -57,7 +58,13 @@ var LoginButton = React.createClass({
 	},
 	render: function() {
 		return (
-				<button className="button" onClick={this.clickHandler}>Login</button>
+				<form method="post" action="/login">
+				User: 
+				<input type="text" name="user" className="button"/>
+				Password: 
+				<input type="password" name="password" className="button"/>
+				<input type="submit" className="button" value="Login" />
+				</form>
 				)
 	}
 });
