@@ -18340,8 +18340,9 @@ var Form = React.createClass({displayName: "Form",
 			});
 		return (
 				React.createElement("div", null, 
-				React.createElement("form", null, 
-				forms
+				React.createElement("form", {action: "/form", method: "post"}, 
+				forms, 
+				React.createElement("input", {type: "submit", value: "Add"})
 				)
 				)
 				)

@@ -8,7 +8,7 @@ var router = express.Router();
 router.get('/', function(req, res) {
 	var data = {};
 	data.req = "products";
-	db.query("products", function(products){
+	db.products("listAll", function(products){
 		data.products = products;
 		data.loggedIn = req.session.loggedIn;
 		console.log("Destroid session", req.session);
@@ -19,12 +19,14 @@ router.get('/', function(req, res) {
 
 router.get('/form', function(req, res) {
 	var data = {forms: [
-		["Product ID", "Product Name", "Description", "Tag"]
+		["Product", "name", "description", "Tag"]
 	]};
-	data.loggedIn = true;
+	data.loggedIn = req.session.loggedIn;
 	data.req = "form";
 	res.render('index', {data: data});
 });
+
+
 
 router.get('/login', function(req, res) {
 	var data = {}
@@ -38,12 +40,12 @@ router.get('/search', function(req, res) {
 	var data = {};
 	var query = url.parse(req.url, true).query.query;
 	if(query) {
-		db.query("search", function(products){
+		db.products("search", function(products){
 			data.products = products;
 			data.loggedIn = req.session.loggedIn;
 			data.req = "products";
 			res.render('index', {data: data});
-		}, query);
+		}, {search: query});
 	}
 	else
 		console.log("Error: no query");
@@ -76,5 +78,13 @@ router.post('/login', function(req, res) {
 	res.redirect('/restricted');
 
 });
+
+router.post('/form', function(req, res) {
+	db.products("add", function(products){
+		console.log(products);
+
+	}, req.body);
+});
+
 
 module.exports = router;

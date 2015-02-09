@@ -111,8 +111,9 @@ var Form = React.createClass({
 			});
 		return (
 				<div>
-				<form>
+				<form action="/form" method="post">
 				{forms}
+				<input type="submit" value="Add"/>
 				</form>
 				</div>
 				)
