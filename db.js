@@ -46,10 +46,13 @@ module.exports.users = function(action, callback, data) {
 	var connection = handleConnection();
 	switch (action) {
 		case "add":
-			connection.query('INSERT INTO users (user, e-mail, name, adress, phone)', function(err, row) {
-				if (err) console.error(err);
-				callback(row);
-			});
+			connection.query('BEGIN; ' + 
+					'INSERT INTO `piattaforma`.`Utente` ' + jsonToSQL(['E-mail', 'Nome', 'Cognome', 'Residenza', 'IndirizzoSpedizione'], data) + ' ; ' +
+					'INSERT INTO `piattaforma`.`Credenziali` (`Utente`, `Password`, `Username`) VALUES (LAST_INSERT_ID(), ' + data.Password + ', ' + data.Username + '); ' +  //could not use jsonToSQL
+					'COMMIT;', function(err, row) {
+						if (err) console.error(err);
+						callback(row);
+					});
 			break;
 		case "login":
 			connection.query('SELECT user FROM users WHERE user = ' + data.user + ' & password = ' + data.password, function(err, row) {
@@ -63,7 +66,7 @@ module.exports.users = function(action, callback, data) {
 };
 
 //utility to parse json to inserts (columns) and (values)
-function jsonToSQL(head, json , id) {
+function jsonToSQL(head, json) {
 	var str = "";
 	var values = ""
 		head.forEach(function(el, index) {
