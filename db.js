@@ -2,7 +2,7 @@ var mysql      = require('mysql');
 
 function handleConnection(){
 	var connection = mysql.createConnection({
-		host     : '172.17.0.1',
+		host     : '172.17.0.2',
 		user     : 'root',
 		password : 'mysecretpassword'
 	});
@@ -46,11 +46,12 @@ module.exports.users = function(action, callback, data) {
 	var connection = handleConnection();
 	switch (action) {
 		case "add":
+			//Have to handle transaction differtly look at https://github.com/felixge/node-mysql#transactions
 			connection.query('BEGIN; ' + 
 					'INSERT INTO `piattaforma`.`Utente` ' + jsonToSQL(['E-mail', 'Nome', 'Cognome', 'Residenza', 'IndirizzoSpedizione'], data) + ' ; ' +
-					'INSERT INTO `piattaforma`.`Credenziali` (`Utente`, `Password`, `Username`) VALUES (LAST_INSERT_ID(), ' + data.Password + ', ' + data.Username + '); ' +  //could not use jsonToSQL
+					'INSERT INTO `piattaforma`.`Credenziali` (`Utente`, `Password`, `Username`) VALUES (LAST_INSERT_ID(), "' + data.Password + '", "' + data.Username + '"); ' +  //could not use jsonToSQL
 					'COMMIT;', function(err, row) {
-						if (err) console.error(err);
+						if (err) console.error(err ,row);
 						callback(row);
 					});
 			break;
@@ -71,11 +72,11 @@ function jsonToSQL(head, json) {
 	var values = ""
 		head.forEach(function(el, index) {
 			if (index < head.length -1) {
-				str += el + ', ';
+				str += '`' + el + '`, ';
 				values += '"' + json[el] + '", ';
 			}
 			else {
-				str += el;
+				str += '`' + el + '`';
 				values += '"' + json[el] + '"';
 			}
 		});
