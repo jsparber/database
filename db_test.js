@@ -11,7 +11,9 @@ var data = {'Username' : 'jsparber',
 	'IndirizzoSpedizione' : 'Via home Blablabal'
 }
 
-db.users('add', print, data);
+db('addUser', print, data);
+db('addUser', print, data);
+db('addUser', print, data);
 
 
 function print(data) {
