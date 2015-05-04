@@ -11,11 +11,18 @@ var data = {'Username' : 'jsparber',
 	'IndirizzoSpedizione' : 'Via home Blablabal'
 }
 
-db('addUser', print, data);
-data.Username = "jsparber2";
-db('addUser', print, data);
-data.Username = "jsparber5";
-db('addUser', print, data);
+//db('addUser', print, data);
+//data.Username = "jsparber2";
+//db('addUser', print, data);
+//data.Username = "jsparber5";
+//db('addUser', print, data);
+
+//Autore should be session user
+var dataFeedback = {'Utente' : 3 , 'Autore' : 1, 'Contenuto': 'Stato ottimo', 'Valutazione' : 10};
+
+db('addFeedback', print, dataFeedback);
+//data = {'Utente' : 001, 'Importo': 10.20, 'Prodotto': 002};
+//db('bid', print, data);
 
 
 function print(error, data) {

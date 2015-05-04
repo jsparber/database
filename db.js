@@ -61,7 +61,7 @@ module.exports = function(action, callback, data) {
 			, function(err, row) {});
 			break;
 			*/
-		case "bid":
+		case "bid": //to check add now() for Data;
 			connection.query('INSERT INTO `piattaforma`.`Offerta`' + 
 					jsonToSQL(['Utente', 'Importo', 'Data', 'Prodotto']), function(err, row) {
 						if (err) console.error(err ,row);
@@ -70,11 +70,11 @@ module.exports = function(action, callback, data) {
 					});
 			break;
 		case "addFeedback":
-			connection.query('INSERT INTO `piattaforma`.`Offerta`' + 
-					jsonToSQL(['Utente', 'Autore', 'Contenuto', 'Valutazione']), function(err, row) {
-						if (err) console.error(err ,row);
+			connection.query('INSERT INTO `piattaforma`.`Feedback` ' + 
+					jsonToSQL(['Utente', 'Autore', 'Contenuto', 'Valutazione'], data), function(err, row) {
+						//if (err) console.error(err ,row);
 						connection.end();
-						console.log(row);
+						console.log(err, row);
 					});
 			break;
 		case "changeUserProfile":
@@ -106,6 +106,9 @@ module.exports = function(action, callback, data) {
 				console.log("Result", row);
 			});
 			break;
+		default:
+			callback("worng action");
+			connection.end();
 	}
 	//connection.end();
 };
