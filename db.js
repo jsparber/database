@@ -104,7 +104,7 @@ module.exports = function(action, callback, data) {
 					jsonToSQL(['Nome', 'Descrizione', 'Foto', 'Prezzo', 'Categoria',
 						'Sottocategoria', 'Proprietario', 'Stato'], data),
 					'INSERT INTO `piattaforma`.`Pagamento` (`Prodotto`, `Metodo`) VALUES (LAST_INSERT_ID(), ' +
-						data.Metodo + ')',
+						data.Pagamento.Metodo + ')',
 						'INSERT INTO `piattaforma`.`Spedizone` (`Nome`, `Descrizione`, `TempoConsegna`, `Importo`, `Prodotto`) VALUES ("' +
 							data.Spedizione.Nome +'", "' + data.Spedizione.Descrizione + '", "' + 
 							data.Spedizione.TempoConsegna +'", ' +
@@ -125,6 +125,7 @@ module.exports = function(action, callback, data) {
 						});
 					break;
 					case "addPayment":
+					data = data.Pagamento;
 					connection.query('INSERT INTO `piattaforma`.`Pagamento` (`Prodotto`, `Metodo`) VALUES ("' + data.Prodotto + '", "' + data.Metodo + '")',
 							function(err, row) {
 								if (err) console.error(err ,row);
