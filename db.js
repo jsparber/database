@@ -55,20 +55,6 @@ module.exports = function(action, callback, data) {
 						callback(err, row);
 					});
 			break;
-			/*case "addProduct":
-				connection.query(''
-			//Same as addUser
-			, function(err, row) {});
-			break;
-			*/
-		case "bid": //to check add now() for Data;
-			connection.query('INSERT INTO `piattaforma`.`Offerta`' + 
-					jsonToSQL(['Utente', 'Importo', 'Data', 'Prodotto']), function(err, row) {
-						if (err) console.error(err ,row);
-						connection.end();
-						console.log(row);
-					});
-			break;
 		case "addFeedback":
 			connection.query('INSERT INTO `piattaforma`.`Feedback` ' + 
 					jsonToSQL(['Utente', 'Autore', 'Contenuto', 'Valutazione'], data), function(err, row) {
@@ -98,17 +84,69 @@ module.exports = function(action, callback, data) {
 						console.log(row);
 					});
 			break;
-		case "login":
-			connection.query('SELECT user FROM users WHERE user = ' + data.user + ' & password = ' + data.password, function(err, row) {
+//To test
+			case "login":
+				connection.query('SELECT Utente FROM `piattaforma`.`Credenziali` WHERE Username = "' + data.Username + 
+					 '" & Password = "' + data.Password, function(err, row) {
 				if (err) console.error(err);
 				callback(row);
 				connection.end();
 				console.log("Result", row);
-			});
-			break;
-		default:
-			callback("worng action");
-			connection.end();
+				});
+				break;
+				*/
+		case "addProduct": 
+			if (data.stato === 'asta' || data.statpo == 1)
+				var productTypeList = 'INSERT INTO `piattaforma`.`Asta` (`Prodotto`, `Scadenza`, `PrezzoPartenza`, `PrezzoRiserva`) VALUES (LAST_INSERT_ID(), NOW() , "' + data.PrezzoPartenza + '", "' + data.PrezzoRiserva + '");';
+			if (data.stato === 'Vendita diretta' || data.statpo == 2)
+				var productTypeList = 'INSERT INTO `piattaforma`.`VenditaDiretta` (`Prodotto`, `Prezzo`) VALUES (LAST_INSERT_ID(), "' + data.Prezzo + '")';
+			transaction(connection, ['INSERT INTO `piattaforma`.`Utente` ' + 
+					jsonToSQL(['Nome', 'Descrizione', 'Foto', 'Prezzo', 'Categoria',
+						'Sottocategoria', 'Proprietario', 'Stato'], data),
+					'INSERT INTO `piattaforma`.`Pagamento` (`Prodotto`, `Metodo`) VALUES (LAST_INSERT_ID(), ' +
+						data.Metodo + ')',
+						'INSERT INTO `piattaforma`.`Spedizone` (`Nome`, `Descrizione`, `TempoConsegna`, `Importo`, `Prodotto`) VALUES ("' +
+							data.Spedizione.Nome +'", "' + data.Spedizione.Descrizione + '", "' + 
+							data.Spedizione.TempoConsegna +'", ' +
+							data.Spedizione.Importo + ', LAST_INSERT_ID());',
+						productTypeList],
+						function(err, row) {
+							//if (err.code == 'ER_DUP_ENTRY') 
+							connection.end();
+							callback(err, row);
+						});
+					break;
+					case "bid": 
+					connection.query('INSERT INTO `piattaforma`.`Offerta` (`Utente`, `Importo`, `Data`, `Prodotto`) ' + 
+					'VALUES ("' + data.Utente + '", "' + data.Importo + '", NOW(),  "' + data.Prodotto +'")', function(err, row) {
+							if (err) console.error(err ,row);
+							connection.end();
+							console.log(row);
+						});
+					break;
+					case "addPayment":
+					connection.query('INSERT INTO `piattaforma`.`Pagamento` (`Prodotto`, `Metodo`) VALUES ("' + data.Prodotto + '", "' + data.Metodo + '")',
+							function(err, row) {
+								if (err) console.error(err ,row);
+								connection.end();
+								console.log(row);
+							});
+					break;
+					case "addShipment":
+					connection.query('INSERT INTO `piattaforma`.`Spedizone` (`Nome`, `Descrizione`, `TempoConsegna`, `Importo`, `Prodotto`) VALUES ("' +
+							data.Spedizione.Nome +'", "' + data.Spedizione.Descrizione + '", "' + 
+							data.Spedizione.TempoConsegna +'", ' +
+							data.Spedizione.Importo + ', LAST_INSERT_ID());',
+							function(err, row) {
+								if (err) console.error(err ,row);
+								connection.end();
+								console.log(row);
+							});
+					break;
+
+					default:
+					callback("No such action");
+					connection.end();
 	}
 	//connection.end();
 };
@@ -144,16 +182,16 @@ function transaction(connection, queryList, callback) {
 						});
 					}
 					else {
-					connection.commit(function(err) {
-						console.log(data);
-						if (err) { 
-							connection.rollback(function() {
-								callback(err);
-							});
-						}
-						else
-							callback(null, 'success!');
-					});
+						connection.commit(function(err) {
+							console.log(data);
+							if (err) { 
+								connection.rollback(function() {
+									callback(err);
+								});
+							}
+							else
+								callback(null, 'success!');
+						});
 					}
 				});
 			}
