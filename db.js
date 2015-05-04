@@ -78,11 +78,11 @@ module.exports = function(action, callback, data) {
 					});
 			break;
 		case "changeUserProfile":
-			connection.query('UPDATE `piattaforma`.`Utente` E-mail="' + data.E-mail + '", ' + 
-					'Nome="' + data.Nome + '", ' + 
-					'Cognome="' + data.Cognome + '", ' + 
-					'Residenza="' + data.Residezna + '", ' +
-					'IndirizzoSpedizione="' + data.Spedizione + '" WHERE idUtente="' + data.idUtente + '"',
+			connection.query('UPDATE `piattaforma`.`Utente` SET `E-mail` = "' + data['E-mail'] + '", ' + 
+					'`Nome` = "' + data.Nome + '", ' + 
+					'`Cognome` = "' + data.Cognome + '", ' + 
+					'`Residenza` = "' + data.Residenza + '", ' +
+					'`IndirizzoSpedizione` = "' + data.IndirizzoSpedizione + '" WHERE idUtente="' + data.idUtente + '"',
 					function(err, row) {
 						if (err) console.error(err ,row);
 						connection.end();

@@ -18,9 +18,26 @@ var data = {'Username' : 'jsparber',
 //db('addUser', print, data);
 
 //Autore should be session user
-var dataFeedback = {'Utente' : 3 , 'Autore' : 1, 'Contenuto': 'Stato ottimo', 'Valutazione' : 10};
+//var dataFeedback = {'Utente' : 3 , 'Autore' : 1, 'Contenuto': 'Stato ottimo', 'Valutazione' : 10};
 
-db('addFeedback', print, dataFeedback);
+//db('addFeedback', print, dataFeedback);
+
+var data = {'Username' : 'jsparber',
+	'Password' : 'secret',
+	'E-mail' : 'julian@sparber.net',
+ 	'Nome' : 'Julian', 
+	'Cognome' : 'Sparber', 
+	'Residenza' : 'Via home Blablabal', 
+	'IndirizzoSpedizione' : 'Via City 2 City 43545',
+	'idUtente' : 003
+}
+
+
+db('changeUserProfile', print, data);
+
+
+
+
 //data = {'Utente' : 001, 'Importo': 10.20, 'Prodotto': 002};
 //db('bid', print, data);
 
