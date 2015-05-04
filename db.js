@@ -90,8 +90,8 @@ module.exports = function(action, callback, data) {
 					});
 			break;
 		case "changeCredential":
-			connection.query('UPDATE `piattaforma`.`Credenziali` Password="' + data.Password + '", ' + 
-					'Username="' + data.Username + '" WHERE idUtente="' + data.idUtente + '"',
+			connection.query('UPDATE `piattaforma`.`Credenziali` SET Password="' + data.Password + '", ' + 
+					'Username="' + data.Username + '" WHERE Utente="' + data.idUtente + '"',
 					function(err, row) {
 						if (err) console.error(err ,row);
 						connection.end();

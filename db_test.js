@@ -22,7 +22,7 @@ var data = {'Username' : 'jsparber',
 
 //db('addFeedback', print, dataFeedback);
 
-var data = {'Username' : 'jsparber',
+/*var data = {'Username' : 'jsparber',
 	'Password' : 'secret',
 	'E-mail' : 'julian@sparber.net',
  	'Nome' : 'Julian', 
@@ -34,6 +34,13 @@ var data = {'Username' : 'jsparber',
 
 
 db('changeUserProfile', print, data);
+*/
+var data = {'Username' : 'jsparber',
+	'Password' : 'mysupersecertpassword',
+	'idUtente' : 003
+}
+
+db('changeCredential', print, data);
 
 
 
