@@ -12,10 +12,15 @@ var data = {'Username' : 'jsparber',
 }
 
 db('addUser', print, data);
+data.Username = "jsparber2";
 db('addUser', print, data);
+data.Username = "jsparber5";
 db('addUser', print, data);
 
 
-function print(data) {
-	console.log(data);
+function print(error, data) {
+	if(error)
+		console.error(error);
+	else
+		console.log(data);
 }

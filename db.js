@@ -2,7 +2,7 @@ var mysql      = require('mysql');
 
 function handleConnection(){
 	var connection = mysql.createConnection({
-		host     : '172.17.0.2',
+		host     : '172.17.0.3',
 		user     : 'root',
 		password : 'mysecretpassword'
 	});
@@ -50,9 +50,9 @@ module.exports = function(action, callback, data) {
 			transaction(connection, ['INSERT INTO `piattaforma`.`Utente` ' + jsonToSQL(['E-mail', 'Nome', 'Cognome', 'Residenza', 'IndirizzoSpedizione'], data), 
 					'INSERT INTO `piattaforma`.`Credenziali` (`Utente`, `Password`, `Username`) VALUES (LAST_INSERT_ID(), "' + data.Password + '", "' + data.Username + '")'],
 					function(err, row) {
-						if (err) console.error(err ,row);
+						//if (err.code == 'ER_DUP_ENTRY') 
 						connection.end();
-						callback(row);
+						callback(err, row);
 					});
 			break;
 			/*case "addProduct":
@@ -129,39 +129,39 @@ function jsonToSQL(head, json) {
 
 function transaction(connection, queryList, callback) {
 	connection.beginTransaction(function(err) {
-		if (err) { throw err; }
+		if (err) { 
+			callback(err);
+		}
 		for (var i = 0; i < queryList.length; i++) {
-			console.log("Run query " + i);
 			if (i === queryList.length - 1) {
 				connection.query(queryList[i], function(err, result) {
 					if (err) { 
-						console.log(err);
 						connection.rollback(function() {
-							throw err;
+							callback(err);
 						});
 					}
+					else {
 					connection.commit(function(err) {
-						console.log("commit");
+						console.log(data);
 						if (err) { 
 							connection.rollback(function() {
-								throw err;
+								callback(err);
 							});
 						}
 						else
 							callback(null, 'success!');
 					});
+					}
 				});
 			}
 			else {
 				connection.query(queryList[i], function(err, result) {
 					if (err) { 
-						console.log(err);
 						connection.rollback(function() {
-							throw err;
+							callback(err);
 						});
 					}
 				});
-				connection.end();
 			}
 		}
 	});
