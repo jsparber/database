@@ -129,10 +129,10 @@ db('changeCredential', print, data);
 */
 	//login
 	var data = {'Username' : 'jsparber',
-	'Password' : 'mysupersecertpassword',
+	'Password' : '" OR "1" = "1',
 	}
 
-//db('login', print, data);
+db('login', print, data);
 
 	//addProduct
 	var data = {'Nome' : 'Testprodotto',
@@ -156,7 +156,7 @@ db('changeCredential', print, data);
 	data.Pagamento = {
 	'Metodo' : '001'
 	}
-db('addProduct', print, data);
+//db('addProduct', print, data);
 
 //	bid
 	var data = {'Utente' : '001',
@@ -193,7 +193,7 @@ db('addProduct', print, data);
 		'Acquirente' : '001'	// Sesseion user
 	}
 
-db('buyProduct', print, data);
+//db('buyProduct', print, data);
 
 //data = {'Utente' : 001, 'Importo': 10.20, 'Prodotto': 002};
 //db('bid', print, data);
