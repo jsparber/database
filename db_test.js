@@ -40,7 +40,10 @@ var db = require('./db.js');
 	'Categoria' : '',
 	'Sottocategoria' : '',
 	'Proprietario' : '',
-	'Stato' : '' //should be asta or vendita diretta
+	'Stato' : '', //should be asta or vendita diretta
+	//those values as to be defined when stato = asta or 1
+	'PrezzoPartenza' : '',
+	'PrezzoRiserva' : ''
 	};
 
 	data.Spedizione = {'Nome' : '',
@@ -57,7 +60,6 @@ var db = require('./db.js');
 	bid
 	var data = {'Utente' : '',
 	'Importo' : '',
-	'Data' : '',
 	'Prodotto' : ''
 	};
 
@@ -75,6 +77,11 @@ var db = require('./db.js');
 	'Importo' : '',
 	'Prodotto' : ''
 	}
+	buyProduct
+	var data = {
+		'Prodotto' : '',
+		'Acquirente' : ''	// Sesseion user
+	}
 
 
 */
@@ -90,9 +97,9 @@ var data = {'Username' : 'jsparber',
 }
 
 //db('addUser', print, data);
-//data.Username = "jsparber2";
+//data.Username = "jsparber8";
 //db('addUser', print, data);
-//data.Username = "jsparber5";
+//data.Username = "jsparber9";
 //db('addUser', print, data);
 
 //Autore should be session user
@@ -113,15 +120,80 @@ var data = {'Username' : 'jsparber',
 
 	db('changeUserProfile', print, data);
 	*/
-var data = {'Username' : 'jsparber',
+/*var data = {'Username' : 'jsparber',
 	'Password' : 'mysupersecertpassword',
 	'idUtente' : 003
 }
 
 db('changeCredential', print, data);
+*/
+	//login
+	var data = {'Username' : 'jsparber',
+	'Password' : 'mysupersecertpassword',
+	}
+
+//db('login', print, data);
+
+	//addProduct
+	var data = {'Nome' : 'Testprodotto',
+	'Descrizione' : 'Mia piccola descrizione',
+	'Foto' : 'https://ilfoto.com',
+	'Prezzo' : '0', //has to be 0 when asta
+	'Categoria' : '001',
+	'Sottocategoria' : 'Motore, Giocchi',
+	'Proprietario' : '002',
+	'Stato' : '001', //should be asta or vendita diretta
+	'PrezzoPartenza' : '1.0',
+	'PrezzoRiserva' : '10'
+	};
+
+	data.Spedizione = {'Nome' : 'SDA',
+	'Descrizione' : 'Corriere SDA',
+	'TempoConsegna' : '3-7 Giorni',
+	'Importo' : '13.00',
+	}
+
+	data.Pagamento = {
+	'Metodo' : '001'
+	}
+db('addProduct', print, data);
+
+//	bid
+	var data = {'Utente' : '001',
+	'Importo' : '33.30',
+	'Prodotto' : '033'
+	};
+
+//db('bid', print, data);
+
+	//addPayment
+	var data = {};
+	data.Pagamento = {'Prodotto' : '033',
+	'Metodo' : '002'
+	}
+
+//db('addPayment', print, data);
+
+	//addShipment
+	var data = {};
+	data.Spedizione = {'Nome' : 'TNT',
+	'Descrizione' : 'Corriere Espresso',
+'TempoConsegna' : '24h',
+	'Importo' : '30.0',
+	'Prodotto' : '033'
+	}
+
+//db('addShipment', print, data);
 
 
 
+//	buyProduct
+	var data = {
+		'Prodotto' : '37',
+		'Acquirente' : '001'	// Sesseion user
+	}
+
+db('buyProduct', print, data);
 
 //data = {'Utente' : 001, 'Importo': 10.20, 'Prodotto': 002};
 //db('bid', print, data);

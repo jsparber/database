@@ -2,7 +2,7 @@ var mysql      = require('mysql');
 
 function handleConnection(){
 	var connection = mysql.createConnection({
-		host     : '172.17.0.3',
+		host     : '172.17.0.1',
 		user     : 'root',
 		password : 'mysecretpassword'
 	});
@@ -43,12 +43,13 @@ function handleConnection(){
 	};
 	*/
 
+//should always use jsonToSQL would be also value check
 module.exports = function(action, callback, data) { 
 	var connection = handleConnection();
 	switch (action) {
 		case "addUser":
 			transaction(connection, ['INSERT INTO `piattaforma`.`Utente` ' + jsonToSQL(['E-mail', 'Nome', 'Cognome', 'Residenza', 'IndirizzoSpedizione'], data), 
-					'INSERT INTO `piattaforma`.`Credenziali` (`Utente`, `Password`, `Username`) VALUES (LAST_INSERT_ID(), "' + data.Password + '", "' + data.Username + '")'],
+					'INSERT INTO `piattaforma`.`Credenziali` (`Utente`, `Password`, `Username`) VALUES ($LAST_INSERT_ID, "' + data.Password + '", "' + data.Username + '")'],
 					function(err, row) {
 						//if (err.code == 'ER_DUP_ENTRY') 
 						connection.end();
@@ -84,41 +85,39 @@ module.exports = function(action, callback, data) {
 						console.log(row);
 					});
 			break;
-//To test
-			case "login":
-				connection.query('SELECT Utente FROM `piattaforma`.`Credenziali` WHERE Username = "' + data.Username + 
-					 '" & Password = "' + data.Password, function(err, row) {
-				if (err) console.error(err);
-				callback(row);
-				connection.end();
-				console.log("Result", row);
-				});
-				break;
-				*/
+		case "login":
+			connection.query('SELECT Utente FROM `piattaforma`.`Credenziali` WHERE Username = "' + data.Username + 
+					'" AND Password = "' + data.Password + '"', function(err, row) {
+						if (err) console.error(err);
+						callback(row);
+						connection.end();
+						console.log("Result", row);
+					});
+			break;
 		case "addProduct": 
-			if (data.stato === 'asta' || data.statpo == 1)
-				var productTypeList = 'INSERT INTO `piattaforma`.`Asta` (`Prodotto`, `Scadenza`, `PrezzoPartenza`, `PrezzoRiserva`) VALUES (LAST_INSERT_ID(), NOW() , "' + data.PrezzoPartenza + '", "' + data.PrezzoRiserva + '");';
-			if (data.stato === 'Vendita diretta' || data.statpo == 2)
-				var productTypeList = 'INSERT INTO `piattaforma`.`VenditaDiretta` (`Prodotto`, `Prezzo`) VALUES (LAST_INSERT_ID(), "' + data.Prezzo + '")';
-			transaction(connection, ['INSERT INTO `piattaforma`.`Utente` ' + 
-					jsonToSQL(['Nome', 'Descrizione', 'Foto', 'Prezzo', 'Categoria',
+			data.Data = "NOW()";
+			if (parseInt(data.Stato) == 1)
+				var productTypeList = 'INSERT INTO `piattaforma`.`Asta` (`Prodotto`, `Scadenza`, `PrezzoPartenza`, `PrezzoRiserva`) VALUES ($LAST_INSERT_ID, NOW() , "' + data.PrezzoPartenza + '", "' + data.PrezzoRiserva + '");';
+			else if (parseInt(data.Stato) == 2)
+				var productTypeList = 'INSERT INTO `piattaforma`.`VenditaDiretta` (`Prodotto`, `Prezzo`) VALUES ($LAST_INSERT_ID, "' + data.Prezzo + '")';
+			transaction(connection, ['INSERT INTO `piattaforma`.`Prodotto` ' + 
+					jsonToSQL(['Nome', 'Descrizione', 'Foto', 'Data', 'Prezzo', 'Categoria',
 						'Sottocategoria', 'Proprietario', 'Stato'], data),
-					'INSERT INTO `piattaforma`.`Pagamento` (`Prodotto`, `Metodo`) VALUES (LAST_INSERT_ID(), ' +
+					'INSERT INTO `piattaforma`.`Pagamento` (`Prodotto`, `Metodo`) VALUES ($LAST_INSERT_ID, ' +
 						data.Pagamento.Metodo + ')',
 						'INSERT INTO `piattaforma`.`Spedizone` (`Nome`, `Descrizione`, `TempoConsegna`, `Importo`, `Prodotto`) VALUES ("' +
 							data.Spedizione.Nome +'", "' + data.Spedizione.Descrizione + '", "' + 
 							data.Spedizione.TempoConsegna +'", ' +
-							data.Spedizione.Importo + ', LAST_INSERT_ID());',
+							data.Spedizione.Importo + ', $LAST_INSERT_ID);',
 						productTypeList],
 						function(err, row) {
-							//if (err.code == 'ER_DUP_ENTRY') 
 							connection.end();
 							callback(err, row);
 						});
 					break;
 					case "bid": 
 					connection.query('INSERT INTO `piattaforma`.`Offerta` (`Utente`, `Importo`, `Data`, `Prodotto`) ' + 
-					'VALUES ("' + data.Utente + '", "' + data.Importo + '", NOW(),  "' + data.Prodotto +'")', function(err, row) {
+						'VALUES ("' + data.Utente + '", "' + data.Importo + '", NOW(),  "' + data.Prodotto +'")', function(err, row) {
 							if (err) console.error(err ,row);
 							connection.end();
 							console.log(row);
@@ -134,16 +133,27 @@ module.exports = function(action, callback, data) {
 							});
 					break;
 					case "addShipment":
-					connection.query('INSERT INTO `piattaforma`.`Spedizone` (`Nome`, `Descrizione`, `TempoConsegna`, `Importo`, `Prodotto`) VALUES ("' +
-							data.Spedizione.Nome +'", "' + data.Spedizione.Descrizione + '", "' + 
-							data.Spedizione.TempoConsegna +'", ' +
-							data.Spedizione.Importo + ', LAST_INSERT_ID());',
+							data = data.Spedizione;
+							connection.query('INSERT INTO `piattaforma`.`Spedizone` ' +
+							jsonToSQL(['Nome', 'Descrizione', 'TempoConsegna', 'Importo', 'Prodotto'], data),
 							function(err, row) {
 								if (err) console.error(err ,row);
 								connection.end();
 								console.log(row);
 							});
 					break;
+		case "buyProduct":
+			transaction(connection, ['INSERT INTO `piattaforma`.`CronologiaVendite` ' +
+					jsonToSQL(['Prodotto', 'Acquirente'], data),
+					'DELETE FROM `piattaforma`.`VenditaDiretta` WHERE Prodotto = ' + data.Prodotto,
+					'UPDATE `piattaforma`.`Prodotto` SET Stato = 3 WHERE idProdotto = ' + data.Prodotto],
+							function(err, row) {
+								if (err) console.error(err ,row);
+								connection.end();
+								console.log(row);
+							});
+					break;
+
 
 					default:
 					callback("No such action");
@@ -166,45 +176,52 @@ function jsonToSQL(head, json) {
 				values += '"' + json[el] + '"';
 			}
 		});
-	return('(' + str + ') VALUES(' + values + ')'); 
+	return(('(' + str + ') VALUES(' + values + ')').replace(/\"NOW\(\)\"/gi, "NOW()")); 
 }
 
 function transaction(connection, queryList, callback) {
+	var res = [];
+	var firstID = undefined;
 	connection.beginTransaction(function(err) {
 		if (err) { 
 			callback(err);
 		}
-		for (var i = 0; i < queryList.length; i++) {
-			if (i === queryList.length - 1) {
-				connection.query(queryList[i], function(err, result) {
-					if (err) { 
-						connection.rollback(function() {
-							callback(err);
-						});
-					}
-					else {
-						connection.commit(function(err) {
-							console.log(data);
-							if (err) { 
-								connection.rollback(function() {
-									callback(err);
-								});
-							}
-							else
-								callback(null, 'success!');
-						});
-					}
-				});
-			}
-			else {
-				connection.query(queryList[i], function(err, result) {
-					if (err) { 
-						connection.rollback(function() {
-							callback(err);
-						});
-					}
-				});
-			}
+		query(0);
+		function query(i){
+			if(firstID !== undefined)
+				queryList[i] = queryList[i].replace(/\$LAST_INSERT_ID/gi, firstID);
+			//console.log(queryList[i], firstID);
+			connection.query(queryList[i], function(err, result) {
+				if (err) { 
+					connection.rollback(function() {
+						callback(err);
+					});
+				}
+				else {
+					res[i] = result;
+					if(firstID === undefined)
+						firstID = result.insertId;
+					//do next query
+					if(queryList[i+1] == undefined)
+						commit();
+					else
+						query(i+1);
+				}
+			});
+		}
+
+		function commit(){
+			connection.commit(function(err) {
+				if (err) { 
+					connection.rollback(function() {
+						callback(err);
+					});
+				}
+				else {
+					callback(null, res);
+				}
+			});
+
 		}
 	});
 }
