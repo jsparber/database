@@ -82,7 +82,7 @@ var Search = React.createClass({
 var Body = React.createClass({
 	render: function() {
 		console.log(this.props);
-		var El;
+		var El = Empty;
 		switch(this.props.data.action) {
 			case 'createForm':
 				El = Form;
@@ -147,4 +147,13 @@ var List = React.createClass({
 				)
 	}
 });
+
+var Empty = React.createClass({
+	render: function() {
+		return (
+				<div />
+				)
+	}
+});
+
 //<-- End Body
