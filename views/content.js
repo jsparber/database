@@ -1,40 +1,39 @@
-	var React = require('react');
+var React = require('react');
 
 module.exports = React.createClass({
 	render: function() {
-		var data = this.props;
-		var req = data.req;
-		var loggedIn = data.loggedIn;
-		var body;
-		var loginButton;
-		if (loggedIn) {
-			loginButton = <LogoutButton />;
-		} else {
-			loginButton = <LoginButton />;
-		}
-		switch (req){
-		case "form": 
-			body = <Form forms = {data.forms}/>;
-			break;
-		case "products": 
-			body = <Products products = {data.products}/>
-			break;
-		}
 		return (
 				<div>
-				<Menu />
-				<Search />
-				{loginButton}
-				{body}
+				<Header user={this.props.session} />
+				<Body data={this.props.data} values={this.props.values} />
 				</div>
 				);
 	}
 });
 
+//Header -->
+var Header = React.createClass({
+	render: function(){
+		return(
+				<div>
+				<Menu />
+				<User user={this.props.user} />
+				<Search />
+				</div>
+				)
+	}
+});
 var Menu = React.createClass({
 	render: function() {
 		return (
 				<div>Piattaforma di aste</div>
+				)
+	}
+});
+var User = React.createClass({
+	render: function() {
+		return (
+				<LoginButton />
 				)
 	}
 });
@@ -65,7 +64,7 @@ var LoginButton = React.createClass({
 				)
 	}
 });
-		
+
 var Search = React.createClass({
 	render: function() {
 		return (
@@ -77,42 +76,55 @@ var Search = React.createClass({
 	}
 });
 
-var Products = React.createClass({
+//<--End Header
+//Body -->
+
+var Body = React.createClass({
 	render: function() {
-			var productList = this.props.products.map(function(product){
-				return (
-						<div>{JSON.stringify(product)}</div>
-						)
-			});
+		console.log(this.props);
+		var El;
+		switch(this.props.data.action) {
+			case 'createForm':
+				El = Form;
+				break;
+			case 'createList':
+				El = List;
+				break;
+		}
 		return (
 				<div>
-				{productList}
+				<El form={this.props.data} values={this.props.values} />
 				</div>
 				)
 	}
 });
 
+//All user input forms
 var Form = React.createClass({
 	render: function() {
-			var forms = this.props.forms.map(function(form, index){
-				var fieldes = form.map(function(field, index){
-					if (index > 0)
-						return (
-								<div>{field}: 
-								<input name={field} />
-								</div>
-								)
-				});
-				return (
+		var form = this.props.form;
+		console.log(form);
+		var fields = form.form.map(function(feld, index){
+			if(feld.sub === undefined) {
+				return(
+					<div>
+						<label>{feld.label}: 
+						<input type="text" name={feld.name} />
+						</label>
+					</div>
+					);
+			}
+					else
+				return(
 						<div>
-						{fieldes}
+						<Form fields={feld.sub} />
 						</div>
 						)
-			});
+		});
 		return (
 				<div>
-				<form action="/form" method="post">
-				{forms}
+				<form action={form.formAction} method={form.formMethod}>
+				{fields}
 				<input type="submit" value="Add"/>
 				</form>
 				</div>
@@ -120,3 +132,19 @@ var Form = React.createClass({
 	}
 });
 
+var List = React.createClass({
+	render: function() {
+		console.log(this.props.values);
+		var productList = this.props.values.map(function(product){
+			return (
+					<div>{JSON.stringify(product)}</div>
+					)
+		});
+		return (
+				<div>
+				{productList}
+				</div>
+				)
+	}
+});
+//<-- End Body

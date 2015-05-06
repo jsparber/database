@@ -4,7 +4,8 @@ function handleConnection(){
 	var connection = mysql.createConnection({
 		host     : '172.17.0.1',
 		user     : 'root',
-		password : 'mysecretpassword'
+		password : 'mysecretpassword',
+		database : 'piattaforma'
 	});
 
 	connection.connect(function(err) {
@@ -128,7 +129,7 @@ module.exports = function(action, callback, data) {
 							});
 					break;
 					case "listCatProducts":
-					connection.query('SELECT * FROM Prodotto p, Categoria c WHERE p.Categoria = c.idCategoria AND c.Nome = ' + data.Categoria,
+					connection.query('SELECT * FROM `piattaforma`.`Prodotto` p, Categoria c WHERE p.Categoria = c.idCategoria AND c.Nome = ' + data.Categoria,
 							function(err, row) {
 								connection.end();
 								callback(err, row);
@@ -136,7 +137,7 @@ module.exports = function(action, callback, data) {
 					break;
 
 					case "listDateProducts":
-					connection.query('SELECT * FROM Prodotto WHERE Data > ' + data.Data,
+					connection.query('SELECT * FROM `piattaforma`.`Prodotto` WHERE Data > ' + data.Data,
 							function(err, row) {
 								connection.end();
 								callback(err, row);
