@@ -29,6 +29,15 @@ var Menu = React.createClass({
 		return (
 				<div>
 				<h1>Piattaforma di aste</h1>
+				<nav className="navbar navbar-default">
+				<div className="container-fluid">
+				<div className="navbar-header">
+				<a className="navbar-brand" href="#">Brand</a>
+				</div>
+				</div>
+				<div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				</div>
+				</nav>
 				<div>{this.props.msg}</div>
 				</div>
 				)

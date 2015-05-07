@@ -18258,6 +18258,15 @@ var Menu = React.createClass({displayName: "Menu",
 		return (
 				React.createElement("div", null, 
 				React.createElement("h1", null, "Piattaforma di aste"), 
+				React.createElement("nav", {className: "navbar navbar-default"}, 
+				React.createElement("div", {className: "container-fluid"}, 
+				React.createElement("div", {className: "navbar-header"}, 
+				React.createElement("a", {className: "navbar-brand", href: "#"}, "Brand")
+				)
+				), 
+				React.createElement("div", {class: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}
+				)
+				), 
 				React.createElement("div", null, this.props.msg)
 				)
 				)
