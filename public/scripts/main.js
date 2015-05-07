@@ -18231,9 +18231,10 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
 	render: function() {
+		console.log(this.props.query);
 		return (
 				React.createElement("div", null, 
-				React.createElement(Header, {user: this.props.session.user, msg: this.props.msg}), 
+				React.createElement(Header, {user: this.props.session.user, msg: this.props.query.msg}), 
 				React.createElement(Body, {data: this.props.data, values: this.props.values})
 				)
 				);

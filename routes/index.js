@@ -9,50 +9,46 @@ var view = require('../views');
 /* GET home page. */
 router.get('/', function(req, res) {
 	//get url argoments
-	var action = url.parse(req.url, true).query.action || 'listProducts';
-	var msg = url.parse(req.url, true).query.msg || '';
+	var query = url.parse(req.url, true).query;
+	var action = query.action || 'listProducts';
 	var session = req.session;
 	if(view[action] && view[action].action === 'createList') {
 		db(action, function(err, data){
 			if(err) console.error("Database Error:", err);
 			var data = {data: view[action] || {},
 				session: session || {},
-				values: data || {},
-				msg : msg || {}
+				values: data || [],
+				query: query
 			};
 			res.render('index', {data: data});
-		});
+		}, query);
 	}
 	else {
-		var data = {data: view[action] || {}, session: session || {}};
+		var data = {data: view[action] || {}, session: session || {}, query : query};
 		res.render('index', {data: data});
 	}
 });
 
 router.post('/job', function(req, res) {
-	var action = url.parse(req.url, true).query.action
+	var action = url.parse(req.url, true).query.action;
 	var session = req.session || {};
+	console.log("Input", req.body);
+	var values = req.body;
+	values.IdUtente = req.session.userId;
+	console.log(values);
 	db(action, function(err, data){
+		console.log("Result", data);
 		if(err) {
 			console.error("Database Error:", err);
 			res.redirect('/?msg=' + err);
 		}
 		else {
-			hander(action, function(err, data){
+		//	hander(action, function(err, data){
 				res.redirect('/?msg=successful');
-			});
+	//		});
 		}
-	}, req.body);
+	}, values);
 });
-
-router.post('/form', function(req, res) {
-	db.products("add", function(products){
-		console.log(products);
-		res.redirect('/restricted');
-	}, req.body);
-});
-
-
 
 router.get('/login', function(req, res) {
 	var data = {}
@@ -60,20 +56,6 @@ router.get('/login', function(req, res) {
 	data.loggedIn =	req.session.loggedIn;
 	//res.render('index', {data: data});
 	res.send("Pleas login");
-});
-
-
-function restrict(req, res, next) {
-	if (req.session.user) {
-		next();
-	} else {
-		req.session.error = 'Access denied!';
-		res.redirect('/login');
-	}
-}
-
-router.get('/restricted', restrict, function(request, response){
-	response.send('This is the restricted area! Hello ' + request.session.user + '! click <a href="/logout">here to logout</a>' + '<p>click <a href="/">here to go back</a></p>');
 });
 
 router.get('/logout', function(request, response){

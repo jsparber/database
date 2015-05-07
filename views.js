@@ -67,12 +67,18 @@ data.form = [
 	{'label' : 'Descrizione', 'name' : 'Descrizione'},
 	{'label' : 'Prezzo', 'name' : 'Prezzo'},
 	{'label' : 'Categoria', 'name' : 'Categoria'},
+	{'label' : 'Imagine', 'name' : 'Foto'},
 	{'label' : 'Sottocategoria', 'name' : 'Sottocategoria'},
 	{'label' : 'Prezzo di Partenza', 'name' : 'PrezzoPartenza'},
 	{'label' : 'Prezzo di Riserva', 'name' : 'PrezzoRiserva'},
+	{'label' : 'Tipo', 'name' : 'Stato'},
+	{'label' : 'Pagamento', 'sub' : [
+		{'label' : 'Metodo', 'name' : 'PagamentoMetodo'}]},
 	{'label' : 'Spedizione', 'sub' : [
-		{'label' : 'Nome', 'name' : 'Nome'},
-		{'label' : 'Tempo di Consegna', 'name' : 'TempoConsegna'}]}
+		{'label' : 'Nome', 'name' : 'SpedizioneNome'},
+		{'label' : 'Descrizione', 'name' : 'SpedizioneDescrizione'},
+		{'label' : 'Importo', 'name' : 'SpedizioneImporto'},
+		{'label' : 'Tempo di Consegna', 'name' : 'SpedizioneTempoConsegna'}]}
 		];
 
 views.addProduct  = data;
@@ -113,10 +119,21 @@ data.header = [
 ];
 
 views.listProducts = data;
+
+var data = {};
+data.action ='createList';
+data.title = 'Prodotti';
+data.header = [
+	{'label' : 'Nome', 'name' : 'Nome'},
+	{'label' : 'Descrizione', 'name' : 'Descrizione'},
+	{'label' : 'Prezzo', 'name' : 'Prezzo'},
+	{'label' : 'Categoria', 'name' : 'Categoria'},
+	{'label' : 'Sottocategoria', 'name' : 'Sottocategoria'},
+];
+
+views.listCatProducts = data;
+
 /*
-views.listCatProducts  = [
-	'Categoria'
-]
 views.listDateProducts  = [
 	'Date' views. this format '2013-01-28 21:00:00'
 ]

@@ -42,18 +42,12 @@ var db = require('./db.js');
 	'Proprietario' : '',
 	'Stato' : '', //should be 1 (asta) or 2 (vendita diretta)
 	'PrezzoPartenza' : '', //those values as to be defined when stato = 1
-	'PrezzoRiserva' : ''
-	};
-
-	data.Spedizione = {'Nome' : '',
-	'Descrizione' : '',
-	'TempoConsegna' : '',
-	'Importo' : '',
-	'Prodotto' : ''
-	}
-
-	data.Pagamento = {'Prodotto' : '',
-	'Metodo' : ''
+	'PrezzoRiserva' : '',
+	'Spedizione Nome' : '',
+	'SpedizioneDescrizione' : '',
+	'SpedizioneTempoConsegna' : '',
+	'SpedizioneImporto' : '',
+	'PagamentoMetodo' : ''
 	}
 
 	bid
@@ -64,13 +58,13 @@ var db = require('./db.js');
 
 	addPayment
 	var data = {};
-	data.Pagamento = {'Prodotto' : '',
+	data = {'Prodotto' : '',
 	'Metodo' : ''
 	}
 
 	addShipment
 	var data = {};
-	data.Spedizione = {'Nome' : '',
+	data = {'Nome' : '',
 'Descrizione' : '',
 	'TempoConsegna' : '',
 	'Importo' : '',
