@@ -13,7 +13,7 @@ router.get('/', function(req, res) {
 	var session = req.session;
 	if(view[action] && view[action].action === 'createList') {
 		db(action, function(err, data){
-			if(err) console.log("Database Error:", err);
+			if(err) console.error("Database Error:", err);
 			var data = {data: view[action] || {},
 			 						session: session || {},
 									values: data || {}	

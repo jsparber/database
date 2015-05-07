@@ -103,8 +103,22 @@ var Body = React.createClass({
 var Form = React.createClass({
 	render: function() {
 		var form = this.props.form;
-		console.log(form);
-		var fields = form.form.map(function(feld, index){
+		return (
+				<div>
+				<h1>{form.title}</h1>
+				<form action={form.formAction} method={form.formMethod}>
+				<FormFields form={form.form} />
+				<input type="submit" value={form.SubmitText}/>
+				</form>
+				</div>
+				)
+	}
+});
+
+var FormFields = React.createClass({
+	render: function() {
+		var form = this.props.form;
+		var fields = form.map(function(feld, index){
 			if(feld.sub === undefined) {
 				return(
 					<div>
@@ -117,36 +131,58 @@ var Form = React.createClass({
 					else
 				return(
 						<div>
-						<Form fields={feld.sub} />
+						<h2>{feld.label}</h2>
+						<FormFields form={feld.sub} />
 						</div>
 						)
 		});
-		return (
+		return 	(
 				<div>
-				<form action={form.formAction} method={form.formMethod}>
 				{fields}
-				<input type="submit" value="Add"/>
-				</form>
 				</div>
 				)
 	}
 });
 
-var List = React.createClass({
+var TableRow = React.createClass({
 	render: function() {
-		console.log(this.props.values);
-		var productList = this.props.values.map(function(product){
-			return (
-					<div>{JSON.stringify(product)}</div>
+		console.log("My working row", this.props.row);
+		var row = this.props.row.map(function(el){
+			console.log(el);
+			return(
+					<div>
+					</div>
 					)
 		});
 		return (
-				<div>
-				{productList}
-				</div>
+			<td>
+			{row}
+			</td>
+			)
+		}
+});
+
+var List = React.createClass({
+	render: function() {
+		var table = this.props.values.map(function(product){
+			console.log("Im not undefined");
+			return (
+					<tr>
+					<TableRow row={product}/>
+					</tr>
+					)
+		});
+		return (
+				<table>
+				<thead>
+				</thead>
+				{table}
+				</table>
 				)
 	}
 });
+
+
 
 var Empty = React.createClass({
 	render: function() {

@@ -32,6 +32,7 @@ changeUserProfile.action ='createForm';
 changeUserProfile.title = 'scrivi tuo Feedback';
 changeUserProfile.formAction = '/job/?action=addFeedback';
 changeUserProfile.formMethod = 'post';
+changeUserProfile.SubmitText = 'agungi prodotto';
 changeUserProfile.form  = [
 	{'label' : 'E-mail', 'name' : 'E-mail'},
 	{'label' : 'Nome', 'name' : 'Nome'},
@@ -41,29 +42,39 @@ changeUserProfile.form  = [
 ];
 
 views.changeUserProfile  = changeUserProfile;
+
+var data = {};
+data.action ='createForm';
+data.title = 'Username e Password';
+data.formAction = '/job/?action=changeCredential';
+data.formMethod = 'post';
+data.form = [ 
+	{'label' : 'Username', 'name' : 'Username'},
+	{'label' : 'Password', 'name' : 'Password'}
+	]
+
+views.changeCredential  = data;
+
+var data = {};
+data.action ='createForm';
+data.title = 'nuovo prodotto';
+data.formAction = '/job/?action=addProduct';
+data.formMethod = 'post';
+data.form = [ 
+	{'label' : 'Nome', 'name' : 'Nome'},
+	{'label' : 'Descrizione', 'name' : 'Descrizione'},
+	{'label' : 'Prezzo', 'name' : 'Prezzo'},
+	{'label' : 'Categoria', 'name' : 'Categoria'},
+	{'label' : 'Sottocategoria', 'name' : 'Sottocategoria'},
+	{'label' : 'Prezzo di Partenza', 'name' : 'PrezzoPartenza'},
+	{'label' : 'Prezzo di Riserva', 'name' : 'PrezzoRiserva'},
+	{'label' : 'Spedizione', 'sub' : [
+		{'label' : 'Nome', 'name' : 'Nome'},
+		{'label' : 'Tempo di Consegna', 'name' : 'TempoConsegna'}]}
+		];
+
+views.addProduct  = data;
 /*
-views.changeCredential  = ['Username',
-		'Password',
-		'idUtente'
-]
-
-views.addProduct  = ['Nome',
-		'Descrizione',
-		'Foto',
-		'Prezzo',
-		'Categoria',
-		'Sottocategoria',
-		'Proprietario',
-		'Stato',
-		'PrezzoPartenza',
-		'PrezzoRiserva',
-	{'label' : 'Spedizione', 'sub' : ['Nome',
-	'Descrizione',
-	'TempoConsegna',
-	'Importo',
-	'Prodotto'
-]}
-
 views.addProduct.Pagamento = ['Prodotto',
 	'Metodo'
 ]
@@ -97,11 +108,9 @@ views.listProducts = data;
 views.listCatProducts  = [
 	'Categoria'
 ]
-
 views.listDateProducts  = [
 	'Date' views. this format '2013-01-28 21:00:00'
 ]
-
 views.userProducts  = [
 	'Username'
 ]

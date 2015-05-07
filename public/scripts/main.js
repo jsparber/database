@@ -18332,8 +18332,22 @@ var Body = React.createClass({displayName: "Body",
 var Form = React.createClass({displayName: "Form",
 	render: function() {
 		var form = this.props.form;
-		console.log(form);
-		var fields = form.form.map(function(feld, index){
+		return (
+				React.createElement("div", null, 
+				React.createElement("h1", null, form.title), 
+				React.createElement("form", {action: form.formAction, method: form.formMethod}, 
+				React.createElement(FormFields, {form: form.form}), 
+				React.createElement("input", {type: "submit", value: form.SubmitText})
+				)
+				)
+				)
+	}
+});
+
+var FormFields = React.createClass({displayName: "FormFields",
+	render: function() {
+		var form = this.props.form;
+		var fields = form.map(function(feld, index){
 			if(feld.sub === undefined) {
 				return(
 					React.createElement("div", null, 
@@ -18346,36 +18360,59 @@ var Form = React.createClass({displayName: "Form",
 					else
 				return(
 						React.createElement("div", null, 
-						React.createElement(Form, {fields: feld.sub})
+						React.createElement("h2", null, feld.label), 
+						React.createElement(FormFields, {form: feld.sub})
 						)
 						)
 		});
-		return (
+		return 	(
 				React.createElement("div", null, 
-				React.createElement("form", {action: form.formAction, method: form.formMethod}, 
-				fields, 
-				React.createElement("input", {type: "submit", value: "Add"})
-				)
+				fields
 				)
 				)
 	}
 });
 
-var List = React.createClass({displayName: "List",
+var TableRow = React.createClass({displayName: "TableRow",
 	render: function() {
-		console.log(this.props.values);
-		var productList = this.props.values.map(function(product){
-			return (
-					React.createElement("div", null, JSON.stringify(product))
+		console.log("My working row", this.props.row);
+		var row = this.props.row.map(function(el){
+			console.log(el);
+			return(
+					React.createElement("div", null, 
+					"Hello World"
+					)
 					)
 		});
 		return (
-				React.createElement("div", null, 
-				productList
+			React.createElement("td", null, 
+			"Hello WOrld"
+			)
+			)
+		}
+});
+
+var List = React.createClass({displayName: "List",
+	render: function() {
+		var table = this.props.values.map(function(product){
+			console.log("Im not undefined");
+			return (
+					React.createElement("tr", null, 
+					React.createElement(TableRow, {row: product})
+					)
+					)
+		});
+		return (
+				React.createElement("table", null, 
+				React.createElement("thead", null
+				), 
+				table
 				)
 				)
 	}
 });
+
+
 
 var Empty = React.createClass({displayName: "Empty",
 	render: function() {
