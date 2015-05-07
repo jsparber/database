@@ -159,7 +159,7 @@ var data = {'Username' : 'jsparber',
 	*/
 //login
 var data = {'Username' : 'jsparber',
-	'Password' : '" OR "1" = "1',
+	'Password' : 'secret',
 }
 
 db('login', print, data);

@@ -4,7 +4,7 @@ module.exports = React.createClass({
 	render: function() {
 		return (
 				<div>
-				<Header user={this.props.session} />
+				<Header user={this.props.session.user} msg={this.props.msg} />
 				<Body data={this.props.data} values={this.props.values} />
 				</div>
 				);
@@ -16,7 +16,7 @@ var Header = React.createClass({
 	render: function(){
 		return(
 				<div>
-				<Menu />
+				<Menu msg={this.props.msg} />
 				<User user={this.props.user} />
 				<Search />
 				</div>
@@ -26,14 +26,17 @@ var Header = React.createClass({
 var Menu = React.createClass({
 	render: function() {
 		return (
-				<div>Piattaforma di aste</div>
+				<div>
+				<h1>Piattaforma di aste</h1>
+				<div>{this.props.msg}</div>
+				</div>
 				)
 	}
 });
 var User = React.createClass({
 	render: function() {
 		return (
-				<LoginButton />
+				(this.props.user)? <LogoutButton/> : <LoginButton />
 				)
 	}
 });
@@ -56,9 +59,9 @@ var LoginButton = React.createClass({
 		return (
 				<form method="post" action="/login">
 				User: 
-				<input type="text" name="user" className="button"/>
+				<input type="text" name="Username" className="button"/>
 				Password: 
-				<input type="password" name="password" className="button"/>
+				<input type="password" name="Password" className="button"/>
 				<input type="submit" className="button" value="Login" />
 				</form>
 				)
@@ -81,7 +84,6 @@ var Search = React.createClass({
 
 var Body = React.createClass({
 	render: function() {
-		console.log(this.props);
 		var El = Empty;
 		switch(this.props.data.action) {
 			case 'createForm':
@@ -93,7 +95,7 @@ var Body = React.createClass({
 		}
 		return (
 				<div>
-				<El form={this.props.data} values={this.props.values} />
+				<El cmd={this.props.data} values={this.props.values} />
 				</div>
 				)
 	}
@@ -102,7 +104,7 @@ var Body = React.createClass({
 //All user input forms
 var Form = React.createClass({
 	render: function() {
-		var form = this.props.form;
+		var form = this.props.cmd;
 		return (
 				<div>
 				<h1>{form.title}</h1>
@@ -146,37 +148,55 @@ var FormFields = React.createClass({
 
 var TableRow = React.createClass({
 	render: function() {
-		console.log("My working row", this.props.row);
-		var row = this.props.row.map(function(el){
-			console.log(el);
+		var row = this.props.row;
+		var header= this.props.header;
+		var line = header.map(function(el){
 			return(
-					<div>
-					</div>
+					<td>
+						{row[el.name]}
+					</td>
 					)
 		});
 		return (
-			<td>
-			{row}
-			</td>
+			<tr>
+			{line}
+			</tr>
 			)
 		}
 });
 
-var List = React.createClass({
+var TableHeader = React.createClass({
 	render: function() {
-		var table = this.props.values.map(function(product){
-			console.log("Im not undefined");
-			return (
-					<tr>
-					<TableRow row={product}/>
-					</tr>
+		var header= this.props.header;
+		var head = header.map(function(el){
+			return(
+					<th>
+						{el.label}
+					</th>
 					)
 		});
 		return (
-				<table>
 				<thead>
+				{head}
 				</thead>
+			)
+		}
+});
+var List = React.createClass({
+	render: function() {
+		var cmd = this.props.cmd;
+		var values = this.props.values;
+		var table = values.map(function(row){
+			return (
+					<TableRow row={row} header={cmd.header}/>
+					)
+		});
+		return (
+				<table className="table table-striped">
+				<TableHeader header={cmd.header}/>
+				<tbody>
 				{table}
+				</tbody>
 				</table>
 				)
 	}

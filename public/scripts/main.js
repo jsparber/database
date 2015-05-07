@@ -18233,7 +18233,7 @@ module.exports = React.createClass({displayName: "exports",
 	render: function() {
 		return (
 				React.createElement("div", null, 
-				React.createElement(Header, {user: this.props.session}), 
+				React.createElement(Header, {user: this.props.session.user, msg: this.props.msg}), 
 				React.createElement(Body, {data: this.props.data, values: this.props.values})
 				)
 				);
@@ -18245,7 +18245,7 @@ var Header = React.createClass({displayName: "Header",
 	render: function(){
 		return(
 				React.createElement("div", null, 
-				React.createElement(Menu, null), 
+				React.createElement(Menu, {msg: this.props.msg}), 
 				React.createElement(User, {user: this.props.user}), 
 				React.createElement(Search, null)
 				)
@@ -18255,14 +18255,17 @@ var Header = React.createClass({displayName: "Header",
 var Menu = React.createClass({displayName: "Menu",
 	render: function() {
 		return (
-				React.createElement("div", null, "Piattaforma di aste")
+				React.createElement("div", null, 
+				React.createElement("h1", null, "Piattaforma di aste"), 
+				React.createElement("div", null, this.props.msg)
+				)
 				)
 	}
 });
 var User = React.createClass({displayName: "User",
 	render: function() {
 		return (
-				React.createElement(LoginButton, null)
+				(this.props.user)? React.createElement(LogoutButton, null) : React.createElement(LoginButton, null)
 				)
 	}
 });
@@ -18285,9 +18288,9 @@ var LoginButton = React.createClass({displayName: "LoginButton",
 		return (
 				React.createElement("form", {method: "post", action: "/login"}, 
 				"User:",  
-				React.createElement("input", {type: "text", name: "user", className: "button"}), 
+				React.createElement("input", {type: "text", name: "Username", className: "button"}), 
 				"Password:",  
-				React.createElement("input", {type: "password", name: "password", className: "button"}), 
+				React.createElement("input", {type: "password", name: "Password", className: "button"}), 
 				React.createElement("input", {type: "submit", className: "button", value: "Login"})
 				)
 				)
@@ -18310,7 +18313,6 @@ var Search = React.createClass({displayName: "Search",
 
 var Body = React.createClass({displayName: "Body",
 	render: function() {
-		console.log(this.props);
 		var El = Empty;
 		switch(this.props.data.action) {
 			case 'createForm':
@@ -18322,7 +18324,7 @@ var Body = React.createClass({displayName: "Body",
 		}
 		return (
 				React.createElement("div", null, 
-				React.createElement(El, {form: this.props.data, values: this.props.values})
+				React.createElement(El, {cmd: this.props.data, values: this.props.values})
 				)
 				)
 	}
@@ -18331,7 +18333,7 @@ var Body = React.createClass({displayName: "Body",
 //All user input forms
 var Form = React.createClass({displayName: "Form",
 	render: function() {
-		var form = this.props.form;
+		var form = this.props.cmd;
 		return (
 				React.createElement("div", null, 
 				React.createElement("h1", null, form.title), 
@@ -18375,38 +18377,55 @@ var FormFields = React.createClass({displayName: "FormFields",
 
 var TableRow = React.createClass({displayName: "TableRow",
 	render: function() {
-		console.log("My working row", this.props.row);
-		var row = this.props.row.map(function(el){
-			console.log(el);
+		var row = this.props.row;
+		var header= this.props.header;
+		var line = header.map(function(el){
 			return(
-					React.createElement("div", null, 
-					"Hello World"
+					React.createElement("td", null, 
+						row[el.name]
 					)
 					)
 		});
 		return (
-			React.createElement("td", null, 
-			"Hello WOrld"
+			React.createElement("tr", null, 
+			line
 			)
 			)
 		}
 });
 
-var List = React.createClass({displayName: "List",
+var TableHeader = React.createClass({displayName: "TableHeader",
 	render: function() {
-		var table = this.props.values.map(function(product){
-			console.log("Im not undefined");
-			return (
-					React.createElement("tr", null, 
-					React.createElement(TableRow, {row: product})
+		var header= this.props.header;
+		var head = header.map(function(el){
+			return(
+					React.createElement("th", null, 
+						el.label
 					)
 					)
 		});
 		return (
-				React.createElement("table", null, 
-				React.createElement("thead", null
-				), 
+				React.createElement("thead", null, 
+				head
+				)
+			)
+		}
+});
+var List = React.createClass({displayName: "List",
+	render: function() {
+		var cmd = this.props.cmd;
+		var values = this.props.values;
+		var table = values.map(function(row){
+			return (
+					React.createElement(TableRow, {row: row, header: cmd.header})
+					)
+		});
+		return (
+				React.createElement("table", {className: "table table-striped"}, 
+				React.createElement(TableHeader, {header: cmd.header}), 
+				React.createElement("tbody", null, 
 				table
+				)
 				)
 				)
 	}

@@ -4,6 +4,7 @@ addUser.action ='createForm';
 addUser.title = 'nuovo Utente';
 addUser.formAction = '/job/?action=addUser';
 addUser.formMethod = 'post';
+addUser.SubmitText = 'registrarti';
 addUser.form = [{'label' : 'Username', 'name' : 'Username'},
 	{'label' : 'Password', 'name' : 'Password'},
 	{'label' : 'E-mail', 'name' : 'E-mail'},
@@ -32,7 +33,7 @@ changeUserProfile.action ='createForm';
 changeUserProfile.title = 'scrivi tuo Feedback';
 changeUserProfile.formAction = '/job/?action=addFeedback';
 changeUserProfile.formMethod = 'post';
-changeUserProfile.SubmitText = 'agungi prodotto';
+changeUserProfile.SubmitText = 'Cambi Profilo';
 changeUserProfile.form  = [
 	{'label' : 'E-mail', 'name' : 'E-mail'},
 	{'label' : 'Nome', 'name' : 'Nome'},
@@ -46,6 +47,7 @@ views.changeUserProfile  = changeUserProfile;
 var data = {};
 data.action ='createForm';
 data.title = 'Username e Password';
+data.SubmitText = 'Cambi Password';
 data.formAction = '/job/?action=changeCredential';
 data.formMethod = 'post';
 data.form = [ 
@@ -102,6 +104,13 @@ views.buyProduct  = [
 var data = {};
 data.action ='createList';
 data.title = 'Tutti Prodotti';
+data.header = [
+	{'label' : 'Nome', 'name' : 'Nome'},
+	{'label' : 'Descrizione', 'name' : 'Descrizione'},
+	{'label' : 'Prezzo', 'name' : 'Prezzo'},
+	{'label' : 'Categoria', 'name' : 'Categoria'},
+	{'label' : 'Sottocategoria', 'name' : 'Sottocategoria'},
+];
 
 views.listProducts = data;
 /*

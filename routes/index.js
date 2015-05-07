@@ -9,14 +9,16 @@ var view = require('../views');
 /* GET home page. */
 router.get('/', function(req, res) {
 	//get url argoments
-	var action = url.parse(req.url, true).query.action;
+	var action = url.parse(req.url, true).query.action || 'listProducts';
+	var msg = url.parse(req.url, true).query.msg || '';
 	var session = req.session;
 	if(view[action] && view[action].action === 'createList') {
 		db(action, function(err, data){
 			if(err) console.error("Database Error:", err);
 			var data = {data: view[action] || {},
-			 						session: session || {},
-									values: data || {}	
+				session: session || {},
+				values: data || {},
+				msg : msg || {}
 			};
 			res.render('index', {data: data});
 		});
@@ -28,11 +30,19 @@ router.get('/', function(req, res) {
 });
 
 router.post('/job', function(req, res) {
-	//var action = url.parse(req.url, true).query.action
+	var action = url.parse(req.url, true).query.action
 	var session = req.session || {};
-	console.log(req);
-	res.send("success");
-	//res.render('index', {data: view[action] || {}, session: session});
+	db(action, function(err, data){
+		if(err) {
+			console.error("Database Error:", err);
+			res.redirect('/?msg=' + err);
+		}
+		else {
+			hander(action, function(err, data){
+				res.redirect('/?msg=successful');
+			});
+		}
+	}, req.body);
 });
 
 router.post('/form', function(req, res) {
@@ -73,11 +83,17 @@ router.get('/logout', function(request, response){
 });
 
 router.post('/login', function(req, res) {
-	if(req.body.user == "julian" && req.body.password == "test"){
-		req.session.loggedIn = true;
-		req.session.user = "julian"
-	}
-	res.redirect('/restricted');
+	db('login', function(err, data) {
+		console.log("My scret data", data);
+		if(err || data.length === 0)
+			res.send(err);
+		else {
+			console.log("My data", data);
+			req.session.user = req.body.Username;
+			req.session.userId = data[0].Utente;
+			res.redirect('/');
+		}
+	}, req.body);
 
 });
 
