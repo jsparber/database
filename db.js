@@ -96,6 +96,21 @@ module.exports = function(action, callback, data) {
 												callback(err, row);
 											});
 										break;
+									case "listPaymentMetodes": 
+									connection.query('SELECT * FROM MetodoPagamento',
+											function(err, row) {
+												connection.end();
+												callback(err, row);
+											});
+										break;
+
+										case "listCat": 
+									connection.query('SELECT * FROM Categoria',
+											function(err, row) {
+												connection.end();
+												callback(err, row);
+											});
+										break;
 										case "addPayment":
 										connection.query('INSERT INTO `piattaforma`.`Pagamento` (`Prodotto`, `Metodo`) VALUES (' + data.Prodotto + ', ' + data.Metodo + ')',
 												function(err, row) {
@@ -157,6 +172,14 @@ module.exports = function(action, callback, data) {
 																callback(err, row);
 															});
 														break;
+													case "showCompleteUserProfil":
+													connection.query('SELECT * FROM Utente WHERE idUtente = (SELECT Utente FROM Credenziali WHERE Utente = ' + data.IdUtente + ')', 
+															function(err, row) {
+																connection.end();
+																callback(err, row);
+															});
+														break;
+
 														case "showProduct":
 														connection.query('SELECT * FROM Prodotto WHERE idProdotto =' + data.Prodotto,
 															function(err, row) {

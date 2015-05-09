@@ -2,7 +2,7 @@ var React = require('react');
 
 module.exports = React.createClass({
 	render: function() {
-		console.log(this.props.query);
+		//console.log(this.props.query);
 		return (
 				<div>
 				<Header user={this.props.session.user} msg={this.props.query.msg} />
@@ -15,15 +15,40 @@ module.exports = React.createClass({
 //Header -->
 var Header = React.createClass({
 	render: function(){
+		var MenuTyp  = (this.props.user)? MenuLogedIn : Menu;
 		return(
 				<div>
-				<Menu msg={this.props.msg} />
-				<User user={this.props.user} />
+				<MenuTyp user={this.props.user} msg={this.props.msg} />
 				</div>
 				)
 	}
 });
 var Menu = React.createClass({
+	render: function() {
+		return (
+				<div>
+				<h1>Piattaforma di aste</h1>
+				<nav className="navbar navbar-default">
+				<div className="container-fluid">
+					<div className="navbar-header">
+					</div>
+					<div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul className="nav navbar-nav">
+					<li className="active"><a href="/">Home</a></li>
+					<li><a href="/?action=addUser">registrarti</a></li>
+					<li><User user={this.props.user} /></li>
+					<Search />
+					</ul>
+				</div>
+				</div>
+				</nav>
+				<div>{this.props.msg}</div>
+				</div>
+				)
+	}
+});
+
+var MenuLogedIn = React.createClass({
 	render: function() {
 		return (
 				<div>
@@ -49,6 +74,7 @@ var Menu = React.createClass({
 				)
 	}
 });
+
 var User = React.createClass({
 	render: function() {
 		return (
@@ -68,17 +94,19 @@ var LogoutButton = React.createClass({
 });
 
 var LoginButton = React.createClass({
-	clickHandler: function() {
-		alert("Doing Login");
-	},
 	render: function() {
 		return (
-				<form method="post" action="/login">
-				User: 
-				<input type="text" name="Username" className="button"/>
+				<form className="navbar-form navbar-left" method="post" action="/login">
+				 <div className="form-group">
+				<label>User: 
+				<input  className="form-control" type="text" name="Username"/>
+				</label>
+				<label>
 				Password: 
-				<input type="password" name="Password" className="button"/>
-				<input type="submit" className="button" value="Login" />
+				<input  className="form-control" type="password" name="Password"/>
+				</label>
+				<input className="btn btn-default" type="submit" value="Login" />
+				</div>
 				</form>
 				)
 	}
@@ -123,11 +151,12 @@ var Body = React.createClass({
 var Form = React.createClass({
 	render: function() {
 		var form = this.props.cmd;
+		//console.log(form);
 		return (
 				<div>
 				<h1>{form.title}</h1>
 				<form action={form.formAction} method={form.formMethod}>
-				<FormFields form={form.form} />
+				<FormFields form={form.form} dbData={form.dbData} />
 				<input type="submit" value={form.SubmitText}/>
 				</form>
 				</div>
@@ -138,12 +167,23 @@ var Form = React.createClass({
 var FormFields = React.createClass({
 	render: function() {
 		var form = this.props.form;
+		var values = this.props.dbData;
+		console.log("Values: ", values);
 		var fields = form.map(function(feld, index){
+			if(feld.type === "select") {
+				console.log("Values: " + values);
+				console.log("Name: " + feld.name);
+				var inputFeld = <PopDown values={values[feld.name]}/>
+				//var inputFeld = <select />
+			}
+				else {
+				var inputFeld = <input type={feld.type || "text"} name={feld.name} value={values[feld.name]}></input>
+			}
 			if(feld.sub === undefined) {
 				return(
 					<div>
 						<label>{feld.label}: 
-						<input type="text" name={feld.name} />
+						{inputFeld}
 						</label>
 					</div>
 					);
@@ -152,7 +192,7 @@ var FormFields = React.createClass({
 				return(
 						<div>
 						<h2>{feld.label}</h2>
-						<FormFields form={feld.sub} />
+						<FormFields form={feld.sub}  dbData={values} />
 						</div>
 						)
 		});
@@ -160,6 +200,24 @@ var FormFields = React.createClass({
 				<div>
 				{fields}
 				</div>
+				)
+	}
+});
+
+var PopDown = React.createClass({
+	render: function() {
+		var values = this.props.values;
+		console.log("Vlaue: " + values[2]);
+		var optionList = values.map(function(val, index){
+			console.log("Data" + index);
+			return (
+				(val != undefined)? <option value={index}>{val}</option> : ""
+				)
+		});
+		return(
+				<select>
+				{optionList}
+				</select>
 				)
 	}
 });

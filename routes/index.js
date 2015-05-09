@@ -4,6 +4,7 @@ var cookie = require('cookie-parser');
 var db = require('../db'); //db(action, callback, data);
 var router = express.Router();
 var view = require('../views');
+var preAction = require('../preAction');
 //var handler = require('../handler');
 
 /* GET home page. */
@@ -12,6 +13,17 @@ router.get('/', function(req, res) {
 	var query = url.parse(req.url, true).query;
 	var action = query.action || 'listProducts';
 	var session = req.session;
+	if (view[action] && view[action].preAction) {
+		console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		preAction[view[action].preAction](function(err, dbData) {
+		console.log(dbData);	
+		view[action].dbData = dbData;
+		var data = {data: view[action] || {}, session: session || {}, query : query};
+		res.render('index', {data: data});
+		}, session);
+	}
+	else {
+
 	if(view[action] && view[action].action === 'createList') {
 		db(action, function(err, data){
 			if(err) console.error("Database Error:", err);
@@ -24,8 +36,10 @@ router.get('/', function(req, res) {
 		}, query);
 	}
 	else {
+		view[action].dbData = {};
 		var data = {data: view[action] || {}, session: session || {}, query : query};
 		res.render('index', {data: data});
+	}
 	}
 });
 
@@ -68,10 +82,10 @@ router.post('/login', function(req, res) {
 	db('login', function(err, data) {
 		console.log("My scret data", data);
 		if(err || data.length === 0)
-			res.send(err);
+			res.redirect('/?msg=Wrong login');
 		else {
 			console.log("My data", data);
-			req.session.user = req.body.Username;
+			req.session.user = req.body.Username.substring(1, req.body.Username.length - 1);
 			req.session.userId = data[0].Utente;
 			res.redirect('/');
 		}

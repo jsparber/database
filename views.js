@@ -30,6 +30,7 @@ views.addFeedback = addFeedback;
 
 var changeUserProfile = {};
 changeUserProfile.action ='createForm';
+changeUserProfile.preAction = 'showUserProfil';
 changeUserProfile.title = 'scrivi tuo Feedback';
 changeUserProfile.formAction = '/job/?action=addFeedback';
 changeUserProfile.formMethod = 'post';
@@ -47,6 +48,7 @@ views.changeUserProfile  = changeUserProfile;
 var data = {};
 data.action ='createForm';
 data.title = 'Username e Password';
+data.preAction = 'changeCredential';
 data.SubmitText = 'Cambi Password';
 data.formAction = '/job/?action=changeCredential';
 data.formMethod = 'post';
@@ -59,6 +61,7 @@ views.changeCredential  = data;
 
 var data = {};
 data.action ='createForm';
+data.preAction = 'createForm';
 data.title = 'nuovo prodotto';
 data.formAction = '/job/?action=addProduct';
 data.formMethod = 'post';
@@ -66,14 +69,14 @@ data.form = [
 	{'label' : 'Nome', 'name' : 'Nome'},
 	{'label' : 'Descrizione', 'name' : 'Descrizione'},
 	{'label' : 'Prezzo', 'name' : 'Prezzo'},
-	{'label' : 'Categoria', 'name' : 'Categoria'},
+	{'label' : 'Categoria', 'name' : 'Categoria', 'type' : 'select'},
 	{'label' : 'Imagine', 'name' : 'Foto'},
 	{'label' : 'Sottocategoria', 'name' : 'Sottocategoria'},
 	{'label' : 'Prezzo di Partenza', 'name' : 'PrezzoPartenza'},
 	{'label' : 'Prezzo di Riserva', 'name' : 'PrezzoRiserva'},
-	{'label' : 'Tipo', 'name' : 'Stato'},
+	{'label' : 'Tipo', 'name' : 'Stato', 'type' : 'select'},
 	{'label' : 'Pagamento', 'sub' : [
-		{'label' : 'Metodo', 'name' : 'PagamentoMetodo'}]},
+		{'label' : 'Metodo', 'name' : 'PagamentoMetodo', 'type' : 'select'}]},
 	{'label' : 'Spedizione', 'sub' : [
 		{'label' : 'Nome', 'name' : 'SpedizioneNome'},
 		{'label' : 'Descrizione', 'name' : 'SpedizioneDescrizione'},

@@ -18231,7 +18231,7 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
 	render: function() {
-		console.log(this.props.query);
+		//console.log(this.props.query);
 		return (
 				React.createElement("div", null, 
 				React.createElement(Header, {user: this.props.session.user, msg: this.props.query.msg}), 
@@ -18244,15 +18244,40 @@ module.exports = React.createClass({displayName: "exports",
 //Header -->
 var Header = React.createClass({displayName: "Header",
 	render: function(){
+		var MenuTyp  = (this.props.user)? MenuLogedIn : Menu;
 		return(
 				React.createElement("div", null, 
-				React.createElement(Menu, {msg: this.props.msg}), 
-				React.createElement(User, {user: this.props.user})
+				React.createElement(MenuTyp, {user: this.props.user, msg: this.props.msg})
 				)
 				)
 	}
 });
 var Menu = React.createClass({displayName: "Menu",
+	render: function() {
+		return (
+				React.createElement("div", null, 
+				React.createElement("h1", null, "Piattaforma di aste"), 
+				React.createElement("nav", {className: "navbar navbar-default"}, 
+				React.createElement("div", {className: "container-fluid"}, 
+					React.createElement("div", {className: "navbar-header"}
+					), 
+					React.createElement("div", {className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}, 
+					React.createElement("ul", {className: "nav navbar-nav"}, 
+					React.createElement("li", {className: "active"}, React.createElement("a", {href: "/"}, "Home")), 
+					React.createElement("li", null, React.createElement("a", {href: "/?action=addUser"}, "registrarti")), 
+					React.createElement("li", null, React.createElement(User, {user: this.props.user})), 
+					React.createElement(Search, null)
+					)
+				)
+				)
+				), 
+				React.createElement("div", null, this.props.msg)
+				)
+				)
+	}
+});
+
+var MenuLogedIn = React.createClass({displayName: "MenuLogedIn",
 	render: function() {
 		return (
 				React.createElement("div", null, 
@@ -18278,6 +18303,7 @@ var Menu = React.createClass({displayName: "Menu",
 				)
 	}
 });
+
 var User = React.createClass({displayName: "User",
 	render: function() {
 		return (
@@ -18297,17 +18323,19 @@ var LogoutButton = React.createClass({displayName: "LogoutButton",
 });
 
 var LoginButton = React.createClass({displayName: "LoginButton",
-	clickHandler: function() {
-		alert("Doing Login");
-	},
 	render: function() {
 		return (
-				React.createElement("form", {method: "post", action: "/login"}, 
-				"User:",  
-				React.createElement("input", {type: "text", name: "Username", className: "button"}), 
+				React.createElement("form", {className: "navbar-form navbar-left", method: "post", action: "/login"}, 
+				 React.createElement("div", {className: "form-group"}, 
+				React.createElement("label", null, "User:",  
+				React.createElement("input", {className: "form-control", type: "text", name: "Username"})
+				), 
+				React.createElement("label", null, 
 				"Password:",  
-				React.createElement("input", {type: "password", name: "Password", className: "button"}), 
-				React.createElement("input", {type: "submit", className: "button", value: "Login"})
+				React.createElement("input", {className: "form-control", type: "password", name: "Password"})
+				), 
+				React.createElement("input", {className: "btn btn-default", type: "submit", value: "Login"})
+				)
 				)
 				)
 	}
@@ -18352,11 +18380,12 @@ var Body = React.createClass({displayName: "Body",
 var Form = React.createClass({displayName: "Form",
 	render: function() {
 		var form = this.props.cmd;
+		//console.log(form);
 		return (
 				React.createElement("div", null, 
 				React.createElement("h1", null, form.title), 
 				React.createElement("form", {action: form.formAction, method: form.formMethod}, 
-				React.createElement(FormFields, {form: form.form}), 
+				React.createElement(FormFields, {form: form.form, dbData: form.dbData}), 
 				React.createElement("input", {type: "submit", value: form.SubmitText})
 				)
 				)
@@ -18367,12 +18396,23 @@ var Form = React.createClass({displayName: "Form",
 var FormFields = React.createClass({displayName: "FormFields",
 	render: function() {
 		var form = this.props.form;
+		var values = this.props.dbData;
+		console.log("Values: ", values);
 		var fields = form.map(function(feld, index){
+			if(feld.type === "select") {
+				console.log("Values: " + values);
+				console.log("Name: " + feld.name);
+				var inputFeld = React.createElement(PopDown, {values: values[feld.name]})
+				//var inputFeld = <select />
+			}
+				else {
+				var inputFeld = React.createElement("input", {type: feld.type || "text", name: feld.name, value: values[feld.name]})
+			}
 			if(feld.sub === undefined) {
 				return(
 					React.createElement("div", null, 
 						React.createElement("label", null, feld.label, ":",  
-						React.createElement("input", {type: "text", name: feld.name})
+						inputFeld
 						)
 					)
 					);
@@ -18381,13 +18421,31 @@ var FormFields = React.createClass({displayName: "FormFields",
 				return(
 						React.createElement("div", null, 
 						React.createElement("h2", null, feld.label), 
-						React.createElement(FormFields, {form: feld.sub})
+						React.createElement(FormFields, {form: feld.sub, dbData: values})
 						)
 						)
 		});
 		return 	(
 				React.createElement("div", null, 
 				fields
+				)
+				)
+	}
+});
+
+var PopDown = React.createClass({displayName: "PopDown",
+	render: function() {
+		var values = this.props.values;
+		console.log("Vlaue: " + values[2]);
+		var optionList = values.map(function(val, index){
+			console.log("Data" + index);
+			return (
+				(val != undefined)? React.createElement("option", {value: index}, val) : ""
+				)
+		});
+		return(
+				React.createElement("select", null, 
+				optionList
 				)
 				)
 	}
