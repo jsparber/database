@@ -14,7 +14,6 @@ router.get('/', function(req, res) {
 	var action = query.action || 'listProducts';
 	var session = req.session;
 	if (view[action] && view[action].preAction) {
-		console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		preAction[view[action].preAction](function(err, dbData) {
 		console.log(dbData);	
 		view[action].dbData = dbData;
