@@ -19,7 +19,6 @@ var Header = React.createClass({
 				<div>
 				<Menu msg={this.props.msg} />
 				<User user={this.props.user} />
-				<Search />
 				</div>
 				)
 	}
@@ -31,11 +30,18 @@ var Menu = React.createClass({
 				<h1>Piattaforma di aste</h1>
 				<nav className="navbar navbar-default">
 				<div className="container-fluid">
-				<div className="navbar-header">
-				<a className="navbar-brand" href="#">Brand</a>
+					<div className="navbar-header">
+					</div>
+					<div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul className="nav navbar-nav">
+					<li className="active"><a href="/">Home</a></li>
+					<li><a href="/?action=addProduct">inserici un prodotto</a></li>
+					<li><a href="/?action=changeUserProfile">cambi Profilo</a></li>
+					<li><a href="/?action=changeCredential">cambi Password</a></li>
+					<li className=""><a href="/?action=addFeedback">Scrivi un feedback</a></li>
+					</ul>
+					<Search />
 				</div>
-				</div>
-				<div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				</div>
 				</nav>
 				<div>{this.props.msg}</div>
@@ -81,9 +87,11 @@ var LoginButton = React.createClass({
 var Search = React.createClass({
 	render: function() {
 		return (
-				<form action="/search" type="GET">
-				<input name="query"/>
-				<input type="submit" value="search" placeholder="Search" />
+				<form className="navbar-form navbar-left" role="search" action="/search" type="GET">
+        <div className="form-group">
+				          <input type="text" name="search" className="form-control" placeholder="Search" />
+									<input type="submit" className="btn btn-default" value="search" placeholder="Search" />
+				</div>
 				</form>
 				)
 	}

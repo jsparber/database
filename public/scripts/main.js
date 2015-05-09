@@ -18247,8 +18247,7 @@ var Header = React.createClass({displayName: "Header",
 		return(
 				React.createElement("div", null, 
 				React.createElement(Menu, {msg: this.props.msg}), 
-				React.createElement(User, {user: this.props.user}), 
-				React.createElement(Search, null)
+				React.createElement(User, {user: this.props.user})
 				)
 				)
 	}
@@ -18260,11 +18259,18 @@ var Menu = React.createClass({displayName: "Menu",
 				React.createElement("h1", null, "Piattaforma di aste"), 
 				React.createElement("nav", {className: "navbar navbar-default"}, 
 				React.createElement("div", {className: "container-fluid"}, 
-				React.createElement("div", {className: "navbar-header"}, 
-				React.createElement("a", {className: "navbar-brand", href: "#"}, "Brand")
+					React.createElement("div", {className: "navbar-header"}
+					), 
+					React.createElement("div", {className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}, 
+					React.createElement("ul", {className: "nav navbar-nav"}, 
+					React.createElement("li", {className: "active"}, React.createElement("a", {href: "/"}, "Home")), 
+					React.createElement("li", null, React.createElement("a", {href: "/?action=addProduct"}, "inserici un prodotto")), 
+					React.createElement("li", null, React.createElement("a", {href: "/?action=changeUserProfile"}, "cambi Profilo")), 
+					React.createElement("li", null, React.createElement("a", {href: "/?action=changeCredential"}, "cambi Password")), 
+					React.createElement("li", {className: ""}, React.createElement("a", {href: "/?action=addFeedback"}, "Scrivi un feedback"))
+					), 
+					React.createElement(Search, null)
 				)
-				), 
-				React.createElement("div", {class: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}
 				)
 				), 
 				React.createElement("div", null, this.props.msg)
@@ -18310,9 +18316,11 @@ var LoginButton = React.createClass({displayName: "LoginButton",
 var Search = React.createClass({displayName: "Search",
 	render: function() {
 		return (
-				React.createElement("form", {action: "/search", type: "GET"}, 
-				React.createElement("input", {name: "query"}), 
-				React.createElement("input", {type: "submit", value: "search", placeholder: "Search"})
+				React.createElement("form", {className: "navbar-form navbar-left", role: "search", action: "/search", type: "GET"}, 
+        React.createElement("div", {className: "form-group"}, 
+				          React.createElement("input", {type: "text", name: "search", className: "form-control", placeholder: "Search"}), 
+									React.createElement("input", {type: "submit", className: "btn btn-default", value: "search", placeholder: "Search"})
+				)
 				)
 				)
 	}
