@@ -70,7 +70,7 @@ data.form = [
 	{'label' : 'Descrizione', 'name' : 'Descrizione'},
 	{'label' : 'Prezzo', 'name' : 'Prezzo'},
 	{'label' : 'Categoria', 'name' : 'Categoria', 'type' : 'select'},
-	{'label' : 'Imagine', 'name' : 'Foto'},
+	{'label' : 'Imagine', 'name' : 'Foto', "type" : "file"},
 	{'label' : 'Sottocategoria', 'name' : 'Sottocategoria'},
 	{'label' : 'Prezzo di Partenza', 'name' : 'PrezzoPartenza'},
 	{'label' : 'Prezzo di Riserva', 'name' : 'PrezzoRiserva'},

@@ -45,7 +45,7 @@ router.get('/', function(req, res) {
 router.post('/job', function(req, res) {
 	var action = url.parse(req.url, true).query.action;
 	var session = req.session || {};
-	console.log("Input", req.body);
+	console.log("Files: ", req.files);
 	var values = req.body;
 	values.IdUtente = req.session.userId;
 	console.log(values);
