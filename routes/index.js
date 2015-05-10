@@ -11,41 +11,34 @@ var preAction = require('../preAction');
 router.get('/', function(req, res) {
 	//get url argoments
 	var query = url.parse(req.url, true).query;
-	var action = query.action || 'listProducts';
+	query.action = query.action || 'listProducts';
+	var action = query.action;
 	var session = req.session;
+		console.log("My query", query);
 	if (view[action] && view[action].preAction) {
 		preAction[view[action].preAction](function(err, dbData) {
-		console.log(dbData);	
-		view[action].dbData = dbData;
-		var data = {data: view[action] || {}, session: session || {}, query : query};
-		res.render('index', {data: data});
-		}, session);
-	}
-	else {
-
-	if(view[action] && view[action].action === 'createList') {
-		db(action, function(err, data){
 			if(err) console.error("Database Error:", err);
+			console.log(dbData);	
+			view[action].dbData = dbData;
 			var data = {data: view[action] || {},
 				session: session || {},
-				values: data || [],
+				values: dbData || [],
 				query: query
 			};
 			res.render('index', {data: data});
-		}, query);
+		}, session, query);
 	}
 	else {
 		view[action].dbData = {};
 		var data = {data: view[action] || {}, session: session || {}, query : query};
 		res.render('index', {data: data});
 	}
-	}
 });
 
 router.post('/job', function(req, res) {
 	var action = url.parse(req.url, true).query.action;
 	var session = req.session || {};
-	console.log("Files: ", req.files);
+	console.log("Files: ", req);
 	var values = req.body;
 	values.IdUtente = req.session.userId;
 	console.log(values);
@@ -56,9 +49,9 @@ router.post('/job', function(req, res) {
 			res.redirect('/?msg=' + err);
 		}
 		else {
-		//	hander(action, function(err, data){
-				res.redirect('/?msg=successful');
-	//		});
+			//	hander(action, function(err, data){
+			res.redirect('/?msg=successful');
+			//		});
 		}
 	}, values);
 });

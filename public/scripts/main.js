@@ -18367,6 +18367,12 @@ var Body = React.createClass({displayName: "Body",
 			case 'createList':
 				El = List;
 				break;
+			case 'show':
+				El = show;
+				break;
+			case 'showProduct':
+				El = showProduct;
+				break;
 		}
 		return (
 				React.createElement("div", null, 
@@ -18451,6 +18457,30 @@ var PopDown = React.createClass({displayName: "PopDown",
 	}
 });
 
+var show = React.createClass({displayName: "show",
+	render: function() {	
+
+		return (
+				React.createElement("div", null, 
+				React.createElement("h2", null, 
+				this.props.values[0].Nome + " " + this.props.values[0].Cognome
+				), 
+				this.props.values[0].Residenza
+				)
+				)
+	}
+});
+
+var showProduct = React.createClass({displayName: "showProduct",
+	render: function() {	
+		return (
+				React.createElement("div", null, 
+				this.props.values[0]
+				)
+				)
+	}
+});
+
 var TableRow = React.createClass({displayName: "TableRow",
 	render: function() {
 		var row = this.props.row;
@@ -18462,9 +18492,13 @@ var TableRow = React.createClass({displayName: "TableRow",
 					)
 					)
 		});
+		console.log(row);
 		return (
 			React.createElement("tr", null, 
-			line
+			line, 
+			React.createElement("td", null, 
+			React.createElement("a", {href: "?action=showProduct&Prodotto=" + row.idProdotto}, "dettagli")
+			)
 			)
 			)
 		}

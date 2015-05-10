@@ -30,7 +30,7 @@ views.addFeedback = addFeedback;
 
 var changeUserProfile = {};
 changeUserProfile.action ='createForm';
-changeUserProfile.preAction = 'showUserProfil';
+changeUserProfile.preAction = 'loadUserProfil';
 changeUserProfile.title = 'scrivi tuo Feedback';
 changeUserProfile.formAction = '/job/?action=addFeedback';
 changeUserProfile.formMethod = 'post';
@@ -112,6 +112,7 @@ views.buyProduct  = [
 */
 var data = {};
 data.action ='createList';
+data.preAction = 'createList';
 data.title = 'Tutti Prodotti';
 data.header = [
 	{'label' : 'Nome', 'name' : 'Nome'},
@@ -125,6 +126,7 @@ views.listProducts = data;
 
 var data = {};
 data.action ='createList';
+data.preAction ='createList';
 data.title = 'Prodotti';
 data.header = [
 	{'label' : 'Nome', 'name' : 'Nome'},
@@ -144,17 +146,25 @@ views.userProducts  = [
 	'Username'
 ]
 
-views.showUserProfil  = [
-	'Username'
-]
+*/
+var data = {};
+data.action ='show';
+data.preAction ='createList';
+data.title = 'Profilo';
 
-views.showProduct = [
-	'Prodotto'
-]
+views.showUserProfil = data;
 
+var data = {};
+data.action ='showProduct';
+data.preAction ='createList';
+data.title = 'Prodotto';
+
+views.showProduct = data;
+/*
+views.showProduct = data;
 views.showChronik  = [
 	'Utente' views.session user
 ]
-*/
 
+*/
 module.exports = views;

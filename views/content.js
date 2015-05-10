@@ -138,6 +138,12 @@ var Body = React.createClass({
 			case 'createList':
 				El = List;
 				break;
+			case 'show':
+				El = show;
+				break;
+			case 'showProduct':
+				El = showProduct;
+				break;
 		}
 		return (
 				<div>
@@ -222,6 +228,30 @@ var PopDown = React.createClass({
 	}
 });
 
+var show = React.createClass({
+	render: function() {	
+
+		return (
+				<div>
+				<h2>
+				{this.props.values[0].Nome + " " + this.props.values[0].Cognome}
+				</h2>
+				{this.props.values[0].Residenza}
+				</div>
+				)
+	}
+});
+
+var showProduct = React.createClass({
+	render: function() {	
+		return (
+				<div>
+				{this.props.values[0]}
+				</div>
+				)
+	}
+});
+
 var TableRow = React.createClass({
 	render: function() {
 		var row = this.props.row;
@@ -233,9 +263,13 @@ var TableRow = React.createClass({
 					</td>
 					)
 		});
+		console.log(row);
 		return (
 			<tr>
 			{line}
+			<td>
+			<a href={"?action=showProduct&Prodotto=" + row.idProdotto}>dettagli</a>
+			</td>
 			</tr>
 			)
 		}
