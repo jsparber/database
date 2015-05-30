@@ -5,7 +5,7 @@ function handleConnection(){
 		host     : '172.17.0.1',
 		user     : 'root',
 		password : 'mysecretpassword',
-		database : 'piattaforma'
+		database : 'sparber_asta'
 	});
 
 	connection.connect(function(err) {
@@ -24,8 +24,8 @@ module.exports = function(action, callback, data) {
 	data = escapeInput(connection, data);
 	switch (action) {
 		case "addUser":
-			transaction(connection, ['INSERT INTO `piattaforma`.`Utente` ' + jsonToSQL(['E-mail', 'Nome', 'Cognome', 'Residenza', 'IndirizzoSpedizione'], data), 
-					'INSERT INTO `piattaforma`.`Credenziali` (`Utente`, `Password`, `Username`) VALUES ($LAST_INSERT_ID, ' + data.Password + ', ' + data.Username + ')'],
+			transaction(connection, ['INSERT INTO `Utente` ' + jsonToSQL(['E-mail', 'Nome', 'Cognome', 'Residenza', 'IndirizzoSpedizione'], data), 
+					'INSERT INTO `Credenziali` (`Utente`, `Password`, `Username`) VALUES ($LAST_INSERT_ID, ' + data.Password + ', ' + data.Username + ')'],
 						function(err, row) {
 							//if (err.code == 'ER_DUP_ENTRY') 
 							connection.end();
@@ -33,7 +33,7 @@ module.exports = function(action, callback, data) {
 						});
 					break;
 					case "addFeedback":
-					connection.query('INSERT INTO `piattaforma`.`Feedback` ' + 
+					connection.query('INSERT INTO `Feedback` ' + 
 						jsonToSQL(['Utente', 'Autore', 'Contenuto', 'Valutazione'], data), function(err, row) {
 							connection.end();
 							callback(err, row);
@@ -55,7 +55,7 @@ module.exports = function(action, callback, data) {
 
 					if (query != '') {
 					console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>query", query);
-						connection.query('UPDATE `piattaforma`.`Utente` SET ' + query.substring(0, query.length-2) + ' WHERE idUtente=' + data.IdUtente,
+						connection.query('UPDATE `Utente` SET ' + query.substring(0, query.length-2) + ' WHERE idUtente=' + data.IdUtente,
 							function(err, row) {
 								connection.end();
 								console.log(">>>>>>>>>>>row", row);
@@ -73,7 +73,7 @@ module.exports = function(action, callback, data) {
 						query += '`Username` = ' + data['Username'] + ', ';
 
 					if (query != '') {
-					connection.query('UPDATE `piattaforma`.`Credenziali` SET ' + query.substring(0, query.length-2) + ' WHERE Utente=' + data.IdUtente,
+					connection.query('UPDATE `Credenziali` SET ' + query.substring(0, query.length-2) + ' WHERE Utente=' + data.IdUtente,
 							function(err, row) {
 								connection.end();
 								callback(err, row);
@@ -83,7 +83,7 @@ module.exports = function(action, callback, data) {
 						callback(undefined, {"msg" : "success"});
 					break;
 					case "login":
-					connection.query('SELECT Utente FROM `piattaforma`.`Credenziali` WHERE Username = ' + data.Username + 
+					connection.query('SELECT Utente FROM `Credenziali` WHERE Username = ' + data.Username + 
 							' AND Password = ' + data.Password, function(err, row) {
 								connection.end();
 								callback(err, row);
@@ -94,15 +94,15 @@ module.exports = function(action, callback, data) {
 					data.Proprietario = data.IdUtente;
 					//console.log(data);
 					if (parseInt(data.Stato) == 1)
-						var productTypeList = 'INSERT INTO `piattaforma`.`Asta` (`Prodotto`, `Scadenza`, `PrezzoPartenza`, `PrezzoRiserva`) VALUES ($LAST_INSERT_ID, NOW() , ' + data.PrezzoPartenza + ', ' + data.PrezzoRiserva + ');';
+						var productTypeList = 'INSERT INTO `Asta` (`Prodotto`, `Scadenza`, `PrezzoPartenza`, `PrezzoRiserva`) VALUES ($LAST_INSERT_ID, NOW() , ' + data.PrezzoPartenza + ', ' + data.PrezzoRiserva + ');';
 					else if (parseInt(data.Stato) == 2)
-						var productTypeList = 'INSERT INTO `piattaforma`.`VenditaDiretta` (`Prodotto`, `Prezzo`) VALUES ($LAST_INSERT_ID, ' + data.Prezzo + ')';
-								transaction(connection, ['INSERT INTO `piattaforma`.`Prodotto` ' + 
+						var productTypeList = 'INSERT INTO `VenditaDiretta` (`Prodotto`, `Prezzo`) VALUES ($LAST_INSERT_ID, ' + data.Prezzo + ')';
+								transaction(connection, ['INSERT INTO `Prodotto` ' + 
 									jsonToSQL(['Nome', 'Descrizione', 'Foto', 'Data', 'Prezzo', 'Categoria',
 										'Sottocategoria', 'Proprietario', 'Stato'], data),
-									'INSERT INTO `piattaforma`.`Pagamento` (`Prodotto`, `Metodo`) VALUES ($LAST_INSERT_ID, ' +
+									'INSERT INTO `Pagamento` (`Prodotto`, `Metodo`) VALUES ($LAST_INSERT_ID, ' +
 										data.PagamentoMetodo + ')',
-										'INSERT INTO `piattaforma`.`Spedizone` (`Nome`, `Descrizione`, `TempoConsegna`, `Importo`, `Prodotto`) VALUES (' +
+										'INSERT INTO `Spedizone` (`Nome`, `Descrizione`, `TempoConsegna`, `Importo`, `Prodotto`) VALUES (' +
 											data.SpedizioneNome +', ' + data.SpedizioneDescrizione + ', ' + 
 											data.SpedizioneTempoConsegna +', ' +
 											data.SpedizioneImporto + ', $LAST_INSERT_ID);',
@@ -113,7 +113,7 @@ module.exports = function(action, callback, data) {
 										});
 									break;
 									case "bid": 
-									connection.query('INSERT INTO `piattaforma`.`Offerta` (`Utente`, `Importo`, `Data`, `Prodotto`) ' + 
+									connection.query('INSERT INTO `Offerta` (`Utente`, `Importo`, `Data`, `Prodotto`) ' + 
 										'VALUES (' + data.Utente + ', ' + data.Importo + ', NOW(),  ' + data.Prodotto +')', 
 											function(err, row) {
 												connection.end();
@@ -136,14 +136,14 @@ module.exports = function(action, callback, data) {
 											});
 										break;
 										case "addPayment":
-										connection.query('INSERT INTO `piattaforma`.`Pagamento` (`Prodotto`, `Metodo`) VALUES (' + data.Prodotto + ', ' + data.Metodo + ')',
+										connection.query('INSERT INTO `Pagamento` (`Prodotto`, `Metodo`) VALUES (' + data.Prodotto + ', ' + data.Metodo + ')',
 													function(err, row) {
 														connection.end();
 														callback(err, row);
 													});
 												break;
 												case "addShipment":
-												connection.query('INSERT INTO `piattaforma`.`Spedizone` ' +
+												connection.query('INSERT INTO `Spedizone` ' +
 													jsonToSQL(['Nome', 'Descrizione', 'TempoConsegna', 'Importo', 'Prodotto'], data),
 													function(err, row) {
 														connection.end();
@@ -151,10 +151,10 @@ module.exports = function(action, callback, data) {
 													});
 												break;
 												case "buyProduct":
-												transaction(connection, ['INSERT INTO `piattaforma`.`CronologiaVendite` ' +
+												transaction(connection, ['INSERT INTO `CronologiaVendite` ' +
 													jsonToSQL(['Prodotto', 'Acquirente'], data),
-													'DELETE FROM `piattaforma`.`VenditaDiretta` WHERE Prodotto = ' + data.Prodotto,
-													'UPDATE `piattaforma`.`Prodotto` SET Stato = 3 WHERE idProdotto = ' + data.Prodotto],
+													'DELETE FROM `VenditaDiretta` WHERE Prodotto = ' + data.Prodotto,
+													'UPDATE `Prodotto` SET Stato = 3 WHERE idProdotto = ' + data.Prodotto],
 													function(err, row) {
 														connection.end();
 														callback(err, row);
@@ -176,7 +176,7 @@ module.exports = function(action, callback, data) {
 												break;
 
 												case "listDateProducts":
-												connection.query('SELECT * FROM `piattaforma`.`Prodotto` WHERE Data > ' + data.Data,
+												connection.query('SELECT * FROM `Prodotto` WHERE Data > ' + data.Data,
 														function(err, row) {
 															connection.end();
 															callback(err, row);
