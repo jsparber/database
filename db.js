@@ -40,23 +40,47 @@ module.exports = function(action, callback, data) {
 						});
 					break;
 					case "changeUserProfile":
-					connection.query('UPDATE `piattaforma`.`Utente` SET `E-mail` = ' + data['E-mail'] + ', ' + 
-						'`Nome` = ' + data.Nome + ', ' + 
-						'`Cognome` = ' + data.Cognome + ', ' + 
-						'`Residenza` = ' + data.Residenza + ', ' +
-						'`IndirizzoSpedizione` = ' + data.IndirizzoSpedizione + ' WHERE idUtente=' + data.idUtente,
-						function(err, row) {
-							connection.end();
-							callback(err, row);
-						});
+					console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>request", data);
+					var query = "";
+					if (data['E-mail'] != undefined && data['E-mail'] !== '\'\'')
+						query += '`E-mail` = ' + data['E-mail'] + ', ';
+					if (data['Name'] != undefined && data['Name'] !== '\'\'')
+						query += '`Nome` = ' + data.Nome + ', ';
+					if (data['Cognome'] != undefined && data['Cognome'] !== '\'\'')
+						query +=  '`Cognome` = ' + data.Cognome + ', ';
+					if (data['Residenza'] != undefined && data['Residenza'] !== '\'\'')
+						query += '`Residenza` = ' + data.Residenza + ', ';
+					if (data['IndirizzoSpedizione'] != undefined && data['IndirizzoSpedizione'] !== '\'\'')
+						query += '`IndirizzoSpedizione` = ' + data.IndirizzoSpedizione + ', ';
+
+					if (query != '') {
+					console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>query", query);
+						connection.query('UPDATE `piattaforma`.`Utente` SET ' + query.substring(0, query.length-2) + ' WHERE idUtente=' + data.IdUtente,
+							function(err, row) {
+								connection.end();
+								console.log(">>>>>>>>>>>row", row);
+								callback(err, row);
+							});
+					}
+					else
+						callback(undefined, {"msg" : "success"});
 					break;
 					case "changeCredential":
-					connection.query('UPDATE `piattaforma`.`Credenziali` SET Password=' + data.Password + ', ' + 
-							'Username=' + data.Username + ' WHERE Utente=' + data.idUtente,
+					var query = "";
+					if (data['Password'] != undefined && data['Password'] !== '\'\'')
+						query += '`Password` = ' + data['Password'] + ', ';
+					if (data['Username'] != undefined && data['Username'] !== '\'\'')
+						query += '`Username` = ' + data['Username'] + ', ';
+
+					if (query != '') {
+					connection.query('UPDATE `piattaforma`.`Credenziali` SET ' + query.substring(0, query.length-2) + ' WHERE Utente=' + data.IdUtente,
 							function(err, row) {
 								connection.end();
 								callback(err, row);
 							});
+					}
+					else
+						callback(undefined, {"msg" : "success"});
 					break;
 					case "login":
 					connection.query('SELECT Utente FROM `piattaforma`.`Credenziali` WHERE Username = ' + data.Username + 
@@ -68,7 +92,7 @@ module.exports = function(action, callback, data) {
 					case "addProduct": 
 					data.Data = "NOW()";
 					data.Proprietario = data.IdUtente;
-					console.log(data);
+					//console.log(data);
 					if (parseInt(data.Stato) == 1)
 						var productTypeList = 'INSERT INTO `piattaforma`.`Asta` (`Prodotto`, `Scadenza`, `PrezzoPartenza`, `PrezzoRiserva`) VALUES ($LAST_INSERT_ID, NOW() , ' + data.PrezzoPartenza + ', ' + data.PrezzoRiserva + ');';
 					else if (parseInt(data.Stato) == 2)
@@ -96,8 +120,8 @@ module.exports = function(action, callback, data) {
 												callback(err, row);
 											});
 										break;
-									case "listPaymentMetodes": 
-									connection.query('SELECT * FROM MetodoPagamento',
+										case "listPaymentMetodes": 
+										connection.query('SELECT * FROM MetodoPagamento',
 											function(err, row) {
 												connection.end();
 												callback(err, row);
@@ -105,7 +129,7 @@ module.exports = function(action, callback, data) {
 										break;
 
 										case "listCat": 
-									connection.query('SELECT * FROM Categoria',
+										connection.query('SELECT * FROM Categoria',
 											function(err, row) {
 												connection.end();
 												callback(err, row);
@@ -113,90 +137,90 @@ module.exports = function(action, callback, data) {
 										break;
 										case "addPayment":
 										connection.query('INSERT INTO `piattaforma`.`Pagamento` (`Prodotto`, `Metodo`) VALUES (' + data.Prodotto + ', ' + data.Metodo + ')',
-												function(err, row) {
-													connection.end();
-													callback(err, row);
-												});
-											break;
-											case "addShipment":
-											connection.query('INSERT INTO `piattaforma`.`Spedizone` ' +
-												jsonToSQL(['Nome', 'Descrizione', 'TempoConsegna', 'Importo', 'Prodotto'], data),
-												function(err, row) {
-													connection.end();
-													callback(err, row);
-												});
-											break;
-											case "buyProduct":
-											transaction(connection, ['INSERT INTO `piattaforma`.`CronologiaVendite` ' +
-												jsonToSQL(['Prodotto', 'Acquirente'], data),
-												'DELETE FROM `piattaforma`.`VenditaDiretta` WHERE Prodotto = ' + data.Prodotto,
-												'UPDATE `piattaforma`.`Prodotto` SET Stato = 3 WHERE idProdotto = ' + data.Prodotto],
-												function(err, row) {
-													connection.end();
-													callback(err, row);
-												});
-											break;
-											case "listProducts":
-											connection.query('SELECT p.idProdotto, p.Nome, p.Descrizione, p.Foto, p.Prezzo, c.Nome AS Categoria, p.Sottocategoria FROM Prodotto p, Categoria c WHERE p.Categoria = c.IdCategoria',
 													function(err, row) {
 														connection.end();
 														callback(err, row);
 													});
-											break;
-											case "listCatProducts":
-											connection.query('SELECT p.idProdotto, p.Nome, p.Descrizione, p.Foto, p.Prezzo, c.Nome AS Categoria, p.Sottocategoria FROM Prodotto p, Categoria c WHERE p.Categoria = c.idCategoria AND c.Nome = ' + data.Categoria,
+												break;
+												case "addShipment":
+												connection.query('INSERT INTO `piattaforma`.`Spedizone` ' +
+													jsonToSQL(['Nome', 'Descrizione', 'TempoConsegna', 'Importo', 'Prodotto'], data),
 													function(err, row) {
 														connection.end();
 														callback(err, row);
 													});
-											break;
-
-											case "listDateProducts":
-											connection.query('SELECT * FROM `piattaforma`.`Prodotto` WHERE Data > ' + data.Data,
+												break;
+												case "buyProduct":
+												transaction(connection, ['INSERT INTO `piattaforma`.`CronologiaVendite` ' +
+													jsonToSQL(['Prodotto', 'Acquirente'], data),
+													'DELETE FROM `piattaforma`.`VenditaDiretta` WHERE Prodotto = ' + data.Prodotto,
+													'UPDATE `piattaforma`.`Prodotto` SET Stato = 3 WHERE idProdotto = ' + data.Prodotto],
 													function(err, row) {
 														connection.end();
 														callback(err, row);
 													});
-											break;
-											case "userProducts":
-											connection.query('SELECT * FROM Prodotto WHERE Proprietario = (SELECT Utente FROM Credenziali WHERE Username=' + data.Username + ')',
+												break;
+												case "listProducts":
+												connection.query('SELECT p.idProdotto, p.Nome, p.Descrizione, p.Foto, p.Prezzo, c.Nome AS Categoria, p.Sottocategoria FROM Prodotto p, Categoria c WHERE p.Categoria = c.IdCategoria',
 														function(err, row) {
 															connection.end();
 															callback(err, row);
 														});
-													break;
-													case "showUserProfil":
-													connection.query('SELECT Nome, Cognome, Residenza FROM Utente WHERE idUtente = (SELECT Utente FROM Credenziali WHERE Username = ' + data.Username + ')', 
-															function(err, row) {
-																connection.end();
-																callback(err, row);
-															});
-														break;
-													case "showCompleteUserProfil":
-													connection.query('SELECT * FROM Utente WHERE idUtente = (SELECT Utente FROM Credenziali WHERE Utente = ' + data.IdUtente + ')', 
-															function(err, row) {
-																connection.end();
-																callback(err, row);
-															});
-														break;
+												break;
+												case "listCatProducts":
+												connection.query('SELECT p.idProdotto, p.Nome, p.Descrizione, p.Foto, p.Prezzo, c.Nome AS Categoria, p.Sottocategoria FROM Prodotto p, Categoria c WHERE p.Categoria = c.idCategoria AND c.Nome = ' + data.Categoria,
+														function(err, row) {
+															connection.end();
+															callback(err, row);
+														});
+												break;
 
-														case "showProduct":
-														connection.query('SELECT * FROM Prodotto WHERE idProdotto =' + data.Prodotto,
+												case "listDateProducts":
+												connection.query('SELECT * FROM `piattaforma`.`Prodotto` WHERE Data > ' + data.Data,
+														function(err, row) {
+															connection.end();
+															callback(err, row);
+														});
+												break;
+												case "userProducts":
+												connection.query('SELECT * FROM Prodotto WHERE Proprietario = (SELECT Utente FROM Credenziali WHERE Username=' + data.Username + ')',
 															function(err, row) {
 																connection.end();
 																callback(err, row);
 															});
 														break;
-														case "showChronik":
-														connection.query('SELECT * FROM CronologiaVendite WHERE Acquirente = ' + data.Utente,
-															function(err, row) {
+														case "showUserProfil":
+														connection.query('SELECT Nome, Cognome, Residenza FROM Utente WHERE idUtente = (SELECT Utente FROM Credenziali WHERE Username = ' + data.Username + ')', 
+																function(err, row) {
+																	connection.end();
+																	callback(err, row);
+																});
+															break;
+															case "showCompleteUserProfil":
+															connection.query('SELECT * FROM Utente WHERE idUtente = (SELECT Utente FROM Credenziali WHERE Utente = ' + data.IdUtente + ')', 
+																	function(err, row) {
+																		connection.end();
+																		callback(err, row);
+																	});
+																break;
+
+																case "showProduct":
+																connection.query('SELECT * FROM Prodotto WHERE idProdotto =' + data.Prodotto,
+																	function(err, row) {
+																		connection.end();
+																		callback(err, row);
+																	});
+																break;
+																case "showChronik":
+																connection.query('SELECT * FROM CronologiaVendite WHERE Acquirente = ' + data.Utente,
+																	function(err, row) {
+																		connection.end();
+																		callback(err, row);
+																	});
+																break;
+																default:
 																connection.end();
-																callback(err, row);
-															});
-														break;
-														default:
-														connection.end();
-														callback("No such action");
+																callback("No such action");
 	}
 	//connection.end();
 };
@@ -219,8 +243,8 @@ function jsonToSQL(head, json) {
 }
 
 function transaction(connection, queryList, callback) {
-	var res = [];
 	console.log(queryList);
+	var res = [];
 	var firstID = undefined;
 	connection.beginTransaction(function(err) {
 		if (err) { 

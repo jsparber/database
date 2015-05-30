@@ -16,7 +16,7 @@ preAction.createForm = function(callback, session){
 				for(el in pay) {
 					data.PagamentoMetodo[pay[el].idMetodoPagamento] = pay[el].Nome;
 				}
-				data.Stato = ["Asta", "Vendita diretta"];
+				data.Stato = [undefined, "Asta", "Vendita diretta"];
 				callback(err, data);
 			});
 		}

@@ -18,7 +18,7 @@ router.get('/', function(req, res) {
 	if (view[action] && view[action].preAction) {
 		preAction[view[action].preAction](function(err, dbData) {
 			if(err) console.error("Database Error:", err);
-			console.log(dbData);	
+			//console.log(dbData);	
 			view[action].dbData = dbData;
 			var data = {data: view[action] || {},
 				session: session || {},
@@ -69,6 +69,13 @@ router.get('/logout', function(request, response){
 		response.redirect('/');
 	});
 });
+
+router.get('/search', function(request, response){
+	request.session.destroy(function(){
+		response.redirect('/?msg=search is not yet implemented');
+	});
+});
+
 
 router.post('/login', function(req, res) {
 	db('login', function(err, data) {
