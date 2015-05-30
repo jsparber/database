@@ -10,6 +10,7 @@
     "debug": "~2.1.1",
     "express": "~4.10.6",
     "express-react-views": "^0.7.0",
+    "express-session": "^1.11.2",
     "morgan": "~1.5.1",
     "mysql": "^2.6.2",
     "react": "^0.12.2",
