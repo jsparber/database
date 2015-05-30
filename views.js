@@ -32,7 +32,7 @@ var changeUserProfile = {};
 changeUserProfile.action ='createForm';
 changeUserProfile.preAction = 'loadUserProfil';
 changeUserProfile.title = 'scrivi tuo Feedback';
-changeUserProfile.formAction = '/job/?action=addFeedback';
+changeUserProfile.formAction = '/job/?action=changeUserProfile';
 changeUserProfile.formMethod = 'post';
 changeUserProfile.SubmitText = 'Cambi Profilo';
 changeUserProfile.form  = [
@@ -70,7 +70,7 @@ data.form = [
 	{'label' : 'Descrizione', 'name' : 'Descrizione'},
 	{'label' : 'Prezzo', 'name' : 'Prezzo'},
 	{'label' : 'Categoria', 'name' : 'Categoria', 'type' : 'select'},
-	{'label' : 'Imagine', 'name' : 'Foto', "type" : "file"},
+	{'label' : 'Imagine (url)', 'name' : 'Foto', "type" : "text"},
 	{'label' : 'Sottocategoria', 'name' : 'Sottocategoria'},
 	{'label' : 'Prezzo di Partenza', 'name' : 'PrezzoPartenza'},
 	{'label' : 'Prezzo di Riserva', 'name' : 'PrezzoRiserva'},

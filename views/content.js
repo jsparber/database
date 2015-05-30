@@ -50,6 +50,7 @@ var Menu = React.createClass({
 
 var MenuLogedIn = React.createClass({
 	render: function() {
+					//<li className=""><a href="/?action=addFeedback">Scrivi un feedback</a></li>
 		return (
 				<div>
 				<h1>Piattaforma di aste</h1>
@@ -63,7 +64,6 @@ var MenuLogedIn = React.createClass({
 					<li><a href="/?action=addProduct">inserici un prodotto</a></li>
 					<li><a href="/?action=changeUserProfile">cambi Profilo</a></li>
 					<li><a href="/?action=changeCredential">cambi Password</a></li>
-					<li className=""><a href="/?action=addFeedback">Scrivi un feedback</a></li>
 					</ul>
 					<Search />
 				</div>
@@ -179,11 +179,11 @@ var FormFields = React.createClass({
 			if(feld.type === "select") {
 				console.log("Values: " + values);
 				console.log("Name: " + feld.name);
-				var inputFeld = <PopDown values={values[feld.name]}/>
+				var inputFeld = <PopDown values={values[feld.name]} name={feld.name} />
 				//var inputFeld = <select />
 			}
 				else {
-				var inputFeld = <input type={feld.type || "text"} name={feld.name} value={values[feld.name]}></input>
+				var inputFeld = <input type={feld.type || "text"} name={feld.name} placeholder={values[feld.name]}></input>
 			}
 			if(feld.sub === undefined) {
 				return(
@@ -213,6 +213,7 @@ var FormFields = React.createClass({
 var PopDown = React.createClass({
 	render: function() {
 		var values = this.props.values;
+		console.log(">>>>>>>>>>>>>>>>>>>>Select Name: " + this.props.name);
 		console.log("Vlaue: " + values[2]);
 		var optionList = values.map(function(val, index){
 			console.log("Data" + index);
@@ -221,7 +222,7 @@ var PopDown = React.createClass({
 				)
 		});
 		return(
-				<select>
+				<select name={this.props.name}>
 				{optionList}
 				</select>
 				)
@@ -244,9 +245,39 @@ var show = React.createClass({
 
 var showProduct = React.createClass({
 	render: function() {	
+		/*
+		{ idProdotto: 48,
+			Nome: 'Bici',
+			Descrizione: 'Bici nuova in bianco',
+			Foto: 'my picture',
+			Prezzo: 3,
+			Categoria: 9,
+			Sottocategoria: 'Sport',
+			Proprietario: 1,
+			Stato: 1,
+			Date: null,
+			Data: Sat May 09 2015 15:37:01 GMT+0200 (CEST) }
+		*/
 		return (
-				<div>
-				{this.props.values[0]}
+					<div>
+						<img style={{width: "300px", "margin-left": "100px"}} src={this.props.values[0].Foto || "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png"} />
+						<div style={{display: "inline-block", "margin-left": "100px"}}>
+						<h1>
+						{this.props.values[0].Nome}
+						</h1>
+						<div>
+						{this.props.values[0].Descrizione}
+						</div>
+						<div>
+						{"Prezzo: " + this.props.values[0].Prezzo}
+						</div>
+						<div>
+						{"Sottocategoria: " + this.props.values[0].Sottocategoria}
+						</div>
+						<div>
+						{"data di inserimento: " + this.props.values[0].Data || indefinito}
+						</div>
+						</div>
 				</div>
 				)
 	}
