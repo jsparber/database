@@ -89,8 +89,9 @@ module.exports = function(action, callback, data) {
 										});
 									break;
 									case "bid": 
-									connection.query('INSERT INTO `piattaforma`.`Offerta` (`Utente`, `Importo`, `Data`, `Prodotto`) ' + 
+								transaction(connection, ['INSERT INTO `piattaforma`.`Offerta` (`Utente`, `Importo`, `Data`, `Prodotto`) ' + 
 										'VALUES (' + data.Utente + ', ' + data.Importo + ', NOW(),  ' + data.Prodotto +')', 
+									'UPDATE `piattaforma`.`Prodotto` SET Prezzo = (SELECT MAX(Importo) FROM Offerta WHERE Prodotto = ' + data.Prodotto + ') WHERE idProdotto = ' + data.Prodotto],
 											function(err, row) {
 												connection.end();
 												callback(err, row);
