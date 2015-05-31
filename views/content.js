@@ -62,8 +62,8 @@ var MenuLogedIn = React.createClass({
 					<ul className="nav navbar-nav">
 					<li className="active"><a href="/">Home</a></li>
 					<li><a href="/?action=addProduct">inserici un prodotto</a></li>
-					<li><a href="/?action=changeUserProfile">cambi Profilo</a></li>
-					<li><a href="/?action=changeCredential">cambi Password</a></li>
+					<li><a href="/?action=changeUserProfile">cambia profilo</a></li>
+					<li><a href="/?action=changeCredential">cambia password</a></li>
 					</ul>
 					<Search />
 				</div>
