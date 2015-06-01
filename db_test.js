@@ -222,6 +222,8 @@ var data = {
 //data = {'Utente' : 001, 'Importo': 10.20, 'Prodotto': 002};
 //db('bid', print, data);
 
+//search
+db('search', print, {query: "house"});
 
 function print(error, data) {
 	if(error)

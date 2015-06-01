@@ -5,7 +5,8 @@ function handleConnection(){
 		host     : '172.17.0.1',
 		user     : 'root',
 		password : 'mysecretpassword',
-		database : 'sparber_asta'
+		//database : 'sparber_asta'
+		database : 'piattaforma'
 	});
 
 	connection.connect(function(err) {
@@ -21,6 +22,8 @@ function handleConnection(){
 //should always use jsonToSQL would be also value check
 module.exports = function(action, callback, data) { 
 	var connection = handleConnection();
+	if(data.query)
+		data.query = "%" + data.query + "%";
 	data = escapeInput(connection, data);
 	switch (action) {
 		case "addUser":
@@ -35,6 +38,12 @@ module.exports = function(action, callback, data) {
 					case "addFeedback":
 					connection.query('INSERT INTO `Feedback` ' + 
 						jsonToSQL(['Utente', 'Autore', 'Contenuto', 'Valutazione'], data), function(err, row) {
+							connection.end();
+							callback(err, row);
+						});
+					break;
+					case "search":
+					connection.query('SELECT * FROM Prodotto WHERE  Descrizione LIKE ' + data.query + ' OR Nome LIKE ' + data.query,  function(err, row) {
 							connection.end();
 							callback(err, row);
 						});
