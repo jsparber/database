@@ -44,7 +44,7 @@ module.exports = function(action, callback, data) {
 					break;
 					case "search":
 					console.log(">>>>>>>>>>>>>>>>>>>>>", data);
-					connection.query('SELECT * FROM Prodotto WHERE  Descrizione LIKE ' + data.query + ' OR Nome LIKE ' + data.query,  function(err, row) {
+					connection.query('SELECT p.idProdotto, p.Nome, p.Descrizione, p.Foto, p.Prezzo, c.Nome AS Categoria, p.Sottocategoria FROM Prodotto p, Categoria c WHERE p.Categoria = c.IdCategoria AND (p.Descrizione LIKE ' + data.query + ' OR p.Nome LIKE ' + data.query + ')',  function(err, row) {
 							connection.end();
 							callback(err, row);
 						});
