@@ -31,7 +31,7 @@ views.addFeedback = addFeedback;
 var changeUserProfile = {};
 changeUserProfile.action ='createForm';
 changeUserProfile.preAction = 'loadUserProfil';
-changeUserProfile.title = 'scrivi tuo Feedback';
+changeUserProfile.title = 'cambia tuo profilo';
 changeUserProfile.formAction = '/job/?action=changeUserProfile';
 changeUserProfile.formMethod = 'post';
 changeUserProfile.SubmitText = 'Cambi Profilo';
