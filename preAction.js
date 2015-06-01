@@ -25,7 +25,7 @@ preAction.createForm = function(callback, session){
 };
 
 preAction.createList = function(callback, session, query){
-	console.log(">>>>>>>>>>" , query);
+	//console.log(">>>>>>>>>>" , query);
 
 			db(query.action, function(err, products) {
 				callback(err, products || []);
@@ -34,7 +34,8 @@ preAction.createList = function(callback, session, query){
 
 preAction.loadUserProfil = function(callback, session){
 	db('showCompleteUserProfil', function(err, profil) {
-		console.log(profil[0]);
+		//console.log(profil[0]);
+		profil = profil || [];
 		callback(err, profil[0] || {});
 	},{"IdUtente" : session.userId});
 
