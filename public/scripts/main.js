@@ -18292,7 +18292,8 @@ var MenuLogedIn = React.createClass({displayName: "MenuLogedIn",
 					React.createElement("li", {className: "active"}, React.createElement("a", {href: "/"}, "Home")), 
 					React.createElement("li", null, React.createElement("a", {href: "/?action=addProduct"}, "inserici un prodotto")), 
 					React.createElement("li", null, React.createElement("a", {href: "/?action=changeUserProfile"}, "cambia profilo")), 
-					React.createElement("li", null, React.createElement("a", {href: "/?action=changeCredential"}, "cambia password"))
+					React.createElement("li", null, React.createElement("a", {href: "/?action=changeCredential"}, "cambia password")), 
+					React.createElement("li", null, React.createElement(User, {user: this.props.user}))
 					), 
 					React.createElement(Search, null)
 				)
@@ -18316,7 +18317,7 @@ var LogoutButton = React.createClass({displayName: "LogoutButton",
 	render: function() {
 		return (
 				React.createElement("form", {action: "/logout"}, 
-				React.createElement("input", {type: "submit", className: "button", value: "Logout"})
+				React.createElement("input", {type: "submit", className: "button btn bt-default", value: "Logout"})
 				)
 				)
 	}

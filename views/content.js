@@ -64,6 +64,7 @@ var MenuLogedIn = React.createClass({
 					<li><a href="/?action=addProduct">inserici un prodotto</a></li>
 					<li><a href="/?action=changeUserProfile">cambia profilo</a></li>
 					<li><a href="/?action=changeCredential">cambia password</a></li>
+					<li><User user={this.props.user} /></li>
 					</ul>
 					<Search />
 				</div>
@@ -87,7 +88,7 @@ var LogoutButton = React.createClass({
 	render: function() {
 		return (
 				<form action="/logout">
-				<input type="submit" className="button" value="Logout" />
+				<input type="submit" className="button btn bt-default" value="Logout" />
 				</form>
 				)
 	}
