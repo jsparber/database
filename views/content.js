@@ -120,7 +120,7 @@ var Search = React.createClass({
 		return (
 				<form className="navbar-form navbar-left" role="search" action="/search" type="GET">
         <div className="form-group">
-				          <input type="text" name="search" className="form-control" placeholder="Search" />
+				          <input type="text" name="query" className="form-control" placeholder="Search" />
 									<input type="submit" className="btn btn-default" value="search" placeholder="Search" />
 				</div>
 				</form>

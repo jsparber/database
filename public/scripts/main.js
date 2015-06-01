@@ -18349,7 +18349,7 @@ var Search = React.createClass({displayName: "Search",
 		return (
 				React.createElement("form", {className: "navbar-form navbar-left", role: "search", action: "/search", type: "GET"}, 
         React.createElement("div", {className: "form-group"}, 
-				          React.createElement("input", {type: "text", name: "search", className: "form-control", placeholder: "Search"}), 
+				          React.createElement("input", {type: "text", name: "query", className: "form-control", placeholder: "Search"}), 
 									React.createElement("input", {type: "submit", className: "btn btn-default", value: "search", placeholder: "Search"})
 				)
 				)

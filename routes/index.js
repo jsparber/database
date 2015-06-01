@@ -38,7 +38,7 @@ router.get('/', function(req, res) {
 router.post('/job', function(req, res) {
 	var action = url.parse(req.url, true).query.action;
 	var session = req.session || {};
-	console.log("Files: ", req);
+	//console.log("Files: ", req);
 	var values = req.body;
 	values.IdUtente = req.session.userId;
 	console.log(values);
@@ -71,9 +71,8 @@ router.get('/logout', function(request, response){
 });
 
 router.get('/search', function(request, response){
-	request.session.destroy(function(){
-		response.redirect('/?msg=search is not yet implemented');
-	});
+	var query = url.parse(request.url).query;
+	response.redirect('/?action=search&' + query);
 });
 
 

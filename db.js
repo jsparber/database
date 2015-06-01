@@ -43,6 +43,7 @@ module.exports = function(action, callback, data) {
 						});
 					break;
 					case "search":
+					console.log(">>>>>>>>>>>>>>>>>>>>>", data);
 					connection.query('SELECT * FROM Prodotto WHERE  Descrizione LIKE ' + data.query + ' OR Nome LIKE ' + data.query,  function(err, row) {
 							connection.end();
 							callback(err, row);

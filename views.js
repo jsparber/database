@@ -138,6 +138,20 @@ data.header = [
 
 views.listCatProducts = data;
 
+var data = {};
+data.action ='createList';
+data.preAction = 'createList';
+data.title = 'Prodotti';
+data.header = [
+	{'label' : 'Nome', 'name' : 'Nome'},
+	{'label' : 'Descrizione', 'name' : 'Descrizione'},
+	{'label' : 'Prezzo', 'name' : 'Prezzo'},
+	{'label' : 'Categoria', 'name' : 'Categoria'},
+	{'label' : 'Sottocategoria', 'name' : 'Sottocategoria'},
+];
+
+views.search = data;
+
 /*
 views.listDateProducts  = [
 	'Date' views. this format '2013-01-28 21:00:00'
