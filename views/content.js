@@ -87,8 +87,10 @@ var User = React.createClass({
 var LogoutButton = React.createClass({
 	render: function() {
 		return (
-				<form action="/logout">
-				<input type="submit" className="button btn bt-default" value="Logout" />
+				<form className="navbar-form navbar-left" method="post" action="/logout">
+				 <div className="form-group">
+				<input type="submit" className="btn btn-default" value="Logout" />
+				</div>
 				</form>
 				)
 	}
