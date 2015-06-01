@@ -18316,7 +18316,7 @@ var User = React.createClass({displayName: "User",
 var LogoutButton = React.createClass({displayName: "LogoutButton",
 	render: function() {
 		return (
-				React.createElement("form", {className: "navbar-form navbar-left", method: "post", action: "/logout"}, 
+				React.createElement("form", {className: "navbar-form navbar-left", method: "get", action: "/logout"}, 
 				 React.createElement("div", {className: "form-group"}, 
 				React.createElement("input", {type: "submit", className: "btn btn-default", value: "Logout"})
 				)
