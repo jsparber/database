@@ -10,6 +10,7 @@ Project of Basi di Dati 2015
   
     docker inspect mariadb | grep IPAddress
 ##Run Server
+		npm install
 		watchify -t reactify --standalone main views/main.js -o public/scripts/main.js -v
 
 		and than
