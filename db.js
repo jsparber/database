@@ -22,7 +22,7 @@ function handleConnection(){
 //should always use jsonToSQL would be also value check
 module.exports = function(action, callback, data) { 
 	var connection = handleConnection();
-	if(data.query)
+	if(data && data.query)
 		data.query = "%" + data.query + "%";
 	data = escapeInput(connection, data);
 	switch (action) {
